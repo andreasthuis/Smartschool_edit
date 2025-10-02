@@ -1,0 +1,92 @@
+.topnav {
+    background: linear-gradient(
+        90deg,
+        rgba(44, 164, 212, 1) 0%,
+        rgba(133, 228, 242, 1) 50%,
+        rgba(83, 160, 237, 1) 100%
+    ) !important;
+}
+
+.js-btn-profile > img,
+.header__avatar,
+.topnav__menuitem > img,
+.splitdetail__header__avatar > img,
+.smsc-tabslist__item:before,
+.smsc-tabslist__item:after {
+  display: none !important;
+}
+
+.topnav__menu-arrow {
+    display: none !important;
+}
+
+.smsc-topnav .topnav__menu {
+    overflow: hidden !important;
+}
+
+.topnav__btn--icon--search > svg {
+    width: 20px;
+}
+
+.smsc-topnav .topnav__menu,
+.bubble,
+.smsctooltip {
+    background-color:  rgba(157, 224, 255, 1) !important;
+    border: 2px solid rgba(157, 224, 255, 1) !important;
+    text-decoration: none !important;
+    border-radius: 15px !important;
+    align-items: center !important;
+    transition: none !important;
+}
+
+.bubble {
+    overflow-y: auto !important;
+}
+
+.smsctooltip {
+    line-height: 25px !important;
+    overflow: hidden !important;
+}
+
+.todo-column__header__filter {
+    height: 30px !important;
+}
+
+.bubble,
+.smsctooltip {
+    border-radius: 9px !important;
+}
+
+.topnav__menu--shortcuts > .topnav__menuitem {
+    margin-right: 7px !important;
+}
+
+li {
+    background: transparent !important;
+}
+
+.tree-classic li.open.root {
+    background: none !important;
+    padding: 0px !important;
+}
+
+.smscButton:hover,
+.topnav__menuitem:hover {
+    background-color: rgba(112, 210, 255, 1) !important;
+    font-weight: 600 !important;
+}
+
+.topnav__menuitem {
+    border: 1px solid transparent !important;
+    border-radius: 10px !important;
+    background-color: transparent !important;
+    margin-right: 0px !important;
+    color: black !important;
+}
+
+.enableAnimations .topnav__menuitem {
+    transition:
+        font-size 0.3s,
+        background-position-x 0.3s,
+        border-radius 0.3s;
+}
