@@ -6,3 +6,12 @@
         rgba(83, 160, 237, 1) 100%
     ) !important;
 }
+
+.js-btn-profile > img,
+.header__avatar,
+.topnav__menuitem > img,
+.splitdetail__header__avatar > img,
+.smsc-tabslist__item:before,
+.smsc-tabslist__item:after {
+  display: none !important;
+}
