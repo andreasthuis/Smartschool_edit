@@ -33,3 +33,5 @@
         addButton();
     }
 })();
+
+alert("Estimation feature loaded!");
