@@ -1,4 +1,4 @@
 console.log("Root.js loaded!");
 
-window.loadScript("features/estimation.js");
-window.loadStyles("root.css");
+loadScript("features/estimation.js");
+loadStyles("root.css");
