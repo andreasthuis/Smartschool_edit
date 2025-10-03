@@ -1,5 +1,6 @@
-const url = window.location.href;
-const regex = /^https:\/\/([^.]+)\.smartschool\.be\/results\/main$/;
+(function() {
+    const url = window.location.href;
+    const regex = /^https:\/\/([^.]+)\.smartschool\.be\/results\/main$/;
     if (!regex.test(url)) return;
 
     function addEstimateButton(parent) {
@@ -7,16 +8,13 @@ const regex = /^https:\/\/([^.]+)\.smartschool\.be\/results\/main$/;
 
         const btn = document.createElement("button");
         btn.className = "wide-toolbar__item estimate-button";
-
         btn.innerHTML = `
             <div class="wide-toolbar__item__icon smsc-svg--document_certificate--16"></div>
             <span class="wide-toolbar__item__name">Estimate</span>
         `;
-
         btn.addEventListener("click", () => {
             alert("Estimate button clicked!");
         });
-
         parent.appendChild(btn);
     }
 
@@ -34,3 +32,4 @@ const regex = /^https:\/\/([^.]+)\.smartschool\.be\/results\/main$/;
     if (toolbar) addEstimateButton(toolbar);
 
     alert("Estimation feature loaded! 2.0");
+})();
