@@ -5,7 +5,7 @@
 
     if (!match) return;
 
-    const parent = document.getElementById("js-wide-toolbar");
+    const parent = document.querySelector(".js-wide-toolbar");
     if (!parent) return;
 
     const btn = document.createElement("button");
