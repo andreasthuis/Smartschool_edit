@@ -37,5 +37,5 @@
     const toolbar = document.querySelector(".js-wide-toolbar");
     if (toolbar) addEstimateButton(toolbar);
 
-    console.log("Estimation feature loaded!");
+    console.log("Estimation feature loaded! 2.0");
 })();
