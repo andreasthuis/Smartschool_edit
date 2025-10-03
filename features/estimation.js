@@ -1,6 +1,5 @@
-(function() {
-    const url = window.location.href;
-    const regex = /^https:\/\/([^.]+)\.smartschool\.be\/results\/main$/;
+const url = window.location.href;
+const regex = /^https:\/\/([^.]+)\.smartschool\.be\/results\/main$/;
     if (!regex.test(url)) return;
 
     function addEstimateButton(parent) {
@@ -38,4 +37,3 @@
     if (toolbar) addEstimateButton(toolbar);
 
     console.log("Estimation feature loaded! 2.0");
-})();
