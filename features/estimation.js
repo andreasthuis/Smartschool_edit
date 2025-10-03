@@ -1,16 +1,11 @@
 (function() {
     const url = window.location.href;
     const regex = /^https:\/\/([^.]+)\.smartschool\.be\/results\/main$/;
-    const match = url.match(regex);
+    if (!regex.test(url)) return;
 
-    if (!match) return;
-
-    function addButton() {
-        const parent = document.querySelector(".js-wide-toolbar");
-        if (!parent) {
-            setTimeout(addButton, 100);
-            return;
-        }
+    function addEstimateButton(parent) {
+        // avoid duplicates
+        if (parent.querySelector(".estimate-button")) return;
 
         const btn = document.createElement("button");
         btn.className = "wide-toolbar__item estimate-button";
@@ -27,11 +22,20 @@
         parent.appendChild(btn);
     }
 
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", addButton);
-    } else {
-        addButton();
-    }
-})();
+    // Observe DOM for toolbar
+    const observer = new MutationObserver((mutations, obs) => {
+        const toolbar = document.querySelector(".js-wide-toolbar");
+        if (toolbar) {
+            addEstimateButton(toolbar);
+            obs.disconnect(); // stop observing after adding button
+        }
+    });
 
-alert("Estimation feature loaded!");
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // fallback: try immediately in case toolbar already exists
+    const toolbar = document.querySelector(".js-wide-toolbar");
+    if (toolbar) addEstimateButton(toolbar);
+
+    console.log("Estimation feature loaded!");
+})();
