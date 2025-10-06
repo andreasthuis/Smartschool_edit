@@ -37,7 +37,7 @@
         .append(
           $("<img/>").addClass("wide-toolbar__item__icon").attr("src", ICON_URL)
         ).append(
-          $("<span/>").addClass("wide-toolbar__item__name").text("Grid")
+          $("<span/>").addClass("wide-toolbar__item__name").text("Overzicht")
         ).click(openGrid)
     );
   }
