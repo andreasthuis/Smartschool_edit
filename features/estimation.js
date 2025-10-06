@@ -1,15 +1,11 @@
 (function () {
   'use strict';
 
-  // Use the page's jQuery if present, otherwise the @require jQuery.
   const $ = window.jQuery;
 
-  // Inline SVG icon (data URL) for the toolbar button.
-  // (Small 24x24 grid icon.)
-  const ICON_SVG = `<svg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 24 24'><rect x='2' y='2' width='8' height='8' rx='1' ry='1'/><rect x='14' y='2' width='8' height='8' rx='1' ry='1'/><rect x='2' y='14' width='8' height='8' rx='1' ry='1'/><rect x='14' y='14' width='8' height='8' rx='1' ry='1'/></svg>`;
+  const ICON_SVG = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="graph 2"> <g id="graph 2_2"> <path id="Combined Shape" fill-rule="evenodd" clip-rule="evenodd" d="M33 26.028V37C33 37.5523 32.5523 38 32 38C31.4477 38 31 37.5523 31 37V26.028H25.5646C25.2528 26.028 25.0006 26.2804 25.0006 26.594V40H38.434C38.7457 40 39 39.7457 39 39.434V6.566C39 6.25428 38.7457 6 38.434 6H33.566C33.2543 6 33 6.25428 33 6.566V24.028H34.0006C34.5529 24.028 35.0006 24.4757 35.0006 25.028C35.0006 25.5803 34.5529 26.028 34.0006 26.028H33ZM31 24.028H25.5646C25.3706 24.028 25.1816 24.0495 25 24.0903V18.618C25 17.2002 23.8508 16.05 22.434 16.05H17.566C16.1492 16.05 15 17.2002 15 18.618V31.9726H9.566C8.15022 31.9726 7 33.1218 7 34.5366V39.4066C7 40.8229 8.14972 41.9726 9.566 41.9726H15.7665C15.8414 41.9905 15.9196 42 16 42C16.0804 42 16.1586 41.9905 16.2335 41.9726H20C20.5523 41.9726 21 41.5249 21 40.9726C21 40.4203 20.5523 39.9726 20 39.9726H17V18.618C17 18.3044 17.2542 18.05 17.566 18.05H22.434C22.7458 18.05 23 18.3044 23 18.618V43C23 43.5523 23.4477 44 24 44C24.5523 44 25 43.5523 25 43V42H38.434H38.4346L38.4411 42C39.8541 41.9962 41 40.8479 41 39.434V6.566C41 5.14972 39.8503 4 38.434 4H33.566C32.1497 4 31 5.14972 31 6.566V24.028ZM15 39.9726V33.9726H9.566C9.2544 33.9726 9 34.2268 9 34.5366V39.4066C9 39.7183 9.25428 39.9726 9.566 39.9726H15Z" fill="#000000"></path> </g> </g> </g></svg>`;
   const ICON_URL = 'data:image/svg+xml;utf8,' + encodeURIComponent(ICON_SVG);
 
-  // Helper: wait until an element matching selector exists, then resolve.
   function waitForSelector(selector, timeout = 10000) {
     return new Promise((resolve, reject) => {
       const el = $(selector);
@@ -31,9 +27,7 @@
     });
   }
 
-  // Replace the chrome.runtime.getURL call in original script:
   function addButton() {
-    // If a button with id show-grid already exists, don't add again
     if ($("#show-grid").length) return;
 
     $(".wide-toolbar").append(
@@ -94,7 +88,6 @@
             longest = course.length;
           }
         }
-        // Add row for disclaimer
         let disc_row = $("<tr/>");
         for (let i = 0; i < longest + 1; i++) {
           disc_row.append($("<td/>").addClass("hidden-cell"));
@@ -205,7 +198,6 @@
   }
 
   function onLoad() {
-    // CSS styles from original script
     let style = document.createElement('style');
     style.innerHTML = `
 
@@ -413,7 +405,6 @@
     $("#modal-content, #modal-background").toggleClass("active");
   }
 
-  // Observer that moves the #show-grid button back into .wide-toolbar if removed
   let wideToolbarCallback = function (mutationsList) {
     for (let mutation of mutationsList) {
       if (mutation.type === 'childList' && mutation.removedNodes.length !== 0) {
@@ -427,7 +418,6 @@
   };
   let wideToolbarObserver = new MutationObserver(wideToolbarCallback);
 
-  // Observer that waits for .wide-toolbar to be added under #smscMain
   let smscMainCallback = function (mutationsList, observer) {
     for (let mutation of mutationsList) {
       if (mutation.type === 'childList' && mutation.addedNodes.length === 1 && mutation.addedNodes[0].classList && mutation.addedNodes[0].classList.contains('wide-toolbar')) {
@@ -442,18 +432,15 @@
     }
   };
 
-  // Initialize: wait for #smscMain, then attach observer
   (async function init() {
     try {
       const $smsc = await waitForSelector('#smscMain', 15000);
-      // If .wide-toolbar already exists, just attach observers and init
       if ($('.wide-toolbar').length) {
         const wt = $('.wide-toolbar')[0];
         wideToolbarObserver.observe(wt, { attributes: false, childList: true, subtree: false });
         onLoad();
         addButton();
       } else {
-        // Observe #smscMain for child additions to detect .wide-toolbar
         const smscMainObserver = new MutationObserver(smscMainCallback);
         smscMainObserver.observe($smsc[0], { attributes: false, childList: true, subtree: false });
       }
