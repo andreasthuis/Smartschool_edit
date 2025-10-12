@@ -28,7 +28,7 @@ if (typeof loadScript !== "undefined") {
   popup.innerHTML = `
     <h2 style="margin-bottom: 12px;">Update vereist</h2>
     <p style="margin-bottom: 18px;">
-      Sorry warre, er is een nieuwere versie van de smartschool hack beschikbaar.<br>
+      Sorry warre of andere mensen, er is een nieuwere versie van de smartschool hack beschikbaar.<br>
       Installeer de bijgewerkte versie via de onderstaande knop:
     </p>
     <a href="https://greasyfork.org/scripts/552355" target="_blank" 
