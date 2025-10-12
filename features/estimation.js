@@ -198,7 +198,7 @@
   }
 
   function onLoad() {
-    loadStyles("css/estimation.css");
+    smartschool_loadStyles("css/estimation.css");
     
     if ($("#modal-background").length === 0) {
       $("body").append(
