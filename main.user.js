@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Smartschool_Edit
 // @namespace    http://tampermonkey.net/
-// @version      2025-10-03
+// @version      0.3
 // @description  Smartschool aanpassen met dingen zoals: voorspelling van punten, nieuwe nav kleuren, etc.
 // @license      MIT
 // @author       andreasthuis
