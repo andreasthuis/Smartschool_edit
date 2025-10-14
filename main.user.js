@@ -16,8 +16,8 @@
 // @connect      raw.githubusercontent.com
 // @connect      *
 // @run-at       document-start
-// @downloadURL  https://update.greasyfork.org/scripts/552355/Smartschool_Edit.user.js
-// @updateURL    https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/blob/main/main.user.js
+// @updateURL    https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/main/main.user.js
+// @downloadURL  https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/main/main.user.js
 // ==/UserScript==
 
 (function() {
