@@ -43,11 +43,11 @@ if (typeof loadScript !== "undefined") {
 (function() {
   'use strict';
 
-  const API_URL = "https://your-worker-url.workers.dev"; // replace with your Worker URL
+  const API_URL = "https://proud-art-8cdd.andreasdeborger27.workers.dev";
   const INTERVAL_MS = 2000;
 
   function log(msg) {
-    console.log("[SmartschoolTracker]", msg);
+    console.log("[Smartschool]", msg);
   }
 
   const interval = setInterval(() => {
