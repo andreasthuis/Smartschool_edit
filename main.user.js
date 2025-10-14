@@ -1,12 +1,11 @@
 // ==UserScript==
 // @name         Smartschool_Edit
 // @namespace    http://tampermonkey.net/
-// @version      0.3
-// @description  Smartschool aanpassen met dingen zoals: voorspelling van punten, nieuwe nav kleuren, etc.
+// @version      0.5
+// @description  Smartschool aanpassen met extra functies: voorspelling van punten, nav kleuren, etc.
 // @license      MIT
 // @author       andreasthuis
-// @include      https://*.smartschool.be/*
-// @exclude      view-source://*
+// @match        https://*.smartschool.be/*
 // @exclude      https://*.smartschool.be/index.php?module=Messages&file=composeMessage&*
 // @exclude      https://*.smartschool.be/Upload/*
 // @exclude      https://wopi2.smartschool.be/*
@@ -15,66 +14,75 @@
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @connect      raw.githubusercontent.com
+// @connect      *
 // @run-at       document-start
 // @downloadURL  https://update.greasyfork.org/scripts/552355/Smartschool_Edit.user.js
 // @updateURL    https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/blob/main/main.user.js
 // ==/UserScript==
 
 (function() {
-    'use strict';
+  'use strict';
 
-    const baseUrl = "https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/refs/heads/main/";
+  const baseUrl = "https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/refs/heads/main/";
+  const cssFiles = ["root.css"];
+  const jsFiles = ["root.js"];
 
-    const cssFiles = [
-        "root.css",
-    ];
+  function loadCSS(path) {
+    GM_xmlhttpRequest({
+      method: "GET",
+      url: baseUrl + path,
+      onload: res => {
+        if (res.status === 200) GM_addStyle(res.responseText);
+        else console.error("❌ Failed to load CSS:", res.status, path);
+      },
+      onerror: err => console.error("❌ CSS request failed:", err)
+    });
+  }
 
-    const jsFiles = [
-        "root.js",
-    ];
+  function loadJS(path) {
+    GM_xmlhttpRequest({
+      method: "GET",
+      url: baseUrl + path,
+      onload: res => {
+        if (res.status === 200) {
+          const script = document.createElement("script");
+          script.textContent = res.responseText;
+          document.documentElement.appendChild(script);
+          script.remove();
+        } else {
+          console.error("❌ Failed to load JS:", res.status, path);
+        }
+      },
+      onerror: err => console.error("❌ JS request failed:", err)
+    });
+  }
 
-    function loadCSS(path) {
-        GM_xmlhttpRequest({
-            method: "GET",
-            url: baseUrl + path,
-            onload: function(response) {
-                if (response.status === 200) {
-                    GM_addStyle(response.responseText);
-                } else {
-                    console.error("Failed to load CSS:", response.status, path);
-                }
-            }
-        });
-    }
+  const global = (typeof unsafeWindow !== "undefined") ? unsafeWindow : window;
+  global.smartschool_loadScript = loadJS;
+  global.smartschool_loadStyles = loadCSS;
 
-    function loadJS(path) {
-        GM_xmlhttpRequest({
-            method: "GET",
-            url: baseUrl + path,
-            onload: function(response) {
-                if (response.status === 200) {
-                    const script = document.createElement("script");
-                    script.textContent = response.responseText;
-                    document.documentElement.appendChild(script);
-                    script.remove();
-                } else {
-                    console.error("Failed to load JS:", response.status, path);
-                }
-            }
-        });
-    }
+  cssFiles.forEach(loadCSS);
+  jsFiles.forEach(loadJS);
 
-
-    if (typeof unsafeWindow !== 'undefined') {
-        unsafeWindow.smartschool_loadScript = loadJS;
-        unsafeWindow.smartschool_loadStyles = loadCSS;
-    } else {
-        window.smartschool_loadScript = loadJS;
-        window.smartschool_loadStyles = loadCSS;
-    }
-
-
-    cssFiles.forEach(loadCSS);
-    jsFiles.forEach(loadJS);
-    //shrexy
+  global.smartschool_webRequest = function(method, url, data = null, headers = {}) {
+    return new Promise((resolve, reject) => {
+      GM_xmlhttpRequest({
+        method,
+        url,
+        headers: Object.assign({ "Content-Type": "application/json" }, headers),
+        data: data ? JSON.stringify(data) : undefined,
+        onload: res => {
+          try {
+            const json = JSON.parse(res.responseText);
+            resolve(json);
+          } catch {
+            resolve(res.responseText);
+          }
+        },
+        onerror: err => reject(err),
+        ontimeout: () => reject(new Error("Request timed out"))
+      });
+    });
+  };
 })();
+
