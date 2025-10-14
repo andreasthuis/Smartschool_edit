@@ -129,7 +129,7 @@
       </p>
       <div style="text-align:right;">
         <button id="ss_cancel" style="margin-right:8px;padding:8px 12px;border-radius:6px;border:1px solid #ccc;background:#f3f3f3;cursor:pointer;">Annuleren</button>
-        <button id="ss_accept" style="padding:8px 12px;border-radius:6px;border:none;background:#0078d7;color:#fff;cursor:pointer;">Altijd accepteren</button>
+        <button id="ss_accept" style="padding:8px 12px;border-radius:6px;border:none;background:#0078d7;color:#fff;cursor:pointer;">Begrepen</button>
       </div>
     `;
 
