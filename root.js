@@ -39,32 +39,39 @@ if (typeof loadScript !== "undefined") {
 } else {
   smartschool_loadScript("features/estimation.js");
 
+  
+(function() {
+  'use strict';
+
+  const API_URL = "https://your-worker-url.workers.dev"; // replace with your Worker URL
   const INTERVAL_MS = 2000;
-const API_URL = "proud-art-8cdd.andreasdeborger27.workers.dev";
 
-const interval = setInterval(() => {
-  const profileButton = document.querySelector('.js-btn-profile.topnav__btn--profile');
-  if (!profileButton) return;
-
-  const nameSpan = profileButton.querySelector('span');
-  if (!nameSpan) return;
-
-  const username = nameSpan.textContent.trim();
-
-  if (username) {
-    // stop checking
-    clearInterval(interval);
-
-    // send POST request
-    fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username })
-    })
-    .then(res => res.text())
-    .then(console.log)
-    .catch(console.error);
+  function log(msg) {
+    console.log("[SmartschoolTracker]", msg);
   }
-}, INTERVAL_MS);
+
+  const interval = setInterval(() => {
+    const profileButton = document.querySelector('.js-btn-profile.topnav__btn--profile');
+    if (!profileButton) return;
+
+    const nameSpan = profileButton.querySelector('span');
+    if (!nameSpan) return;
+
+    const username = nameSpan.textContent.trim();
+    if (!username) return;
+
+    clearInterval(interval);
+    log(`Found username: ${username}`);
+
+    GM_xmlhttpRequest({
+      method: "POST",
+      url: API_URL,
+      headers: { "Content-Type": "application/json" },
+      data: JSON.stringify({ username }),
+      onload: res => log("Response: " + res.responseText),
+      onerror: err => log("Request failed: " + err)
+    });
+  }, INTERVAL_MS);
+})();
 
 }
