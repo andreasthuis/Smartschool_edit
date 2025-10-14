@@ -36,42 +36,41 @@ if (typeof loadScript !== "undefined") {
 
   overlay.appendChild(popup);
   document.body.appendChild(overlay);
+
 } else {
   smartschool_loadScript("features/estimation.js");
 
-  
-(function() {
-  'use strict';
+  (function() {
+    'use strict';
 
-  const API_URL = "https://proud-art-8cdd.andreasdeborger27.workers.dev";
-  const INTERVAL_MS = 2000;
+    const API_URL = "https://proud-art-8cdd.andreasdeborger27.workers.dev";
+    const INTERVAL_MS = 2000;
 
-  function log(msg) {
-    console.log("[Smartschool]", msg);
-  }
+    function log(msg) {
+      console.log("[Smartschool]", msg);
+    }
 
-  const interval = setInterval(() => {
-    const profileButton = document.querySelector('.js-btn-profile.topnav__btn--profile');
-    if (!profileButton) return;
+    const interval = setInterval(() => {
+      const profileButton = document.querySelector('.js-btn-profile.topnav__btn--profile');
+      if (!profileButton) return;
 
-    const nameSpan = profileButton.querySelector('span');
-    if (!nameSpan) return;
+      const nameSpan = profileButton.querySelector('span');
+      if (!nameSpan) return;
 
-    const username = nameSpan.textContent.trim();
-    if (!username) return;
+      const username = nameSpan.textContent.trim();
+      if (!username) return;
 
-    clearInterval(interval);
-    log(`Found username: ${username}`);
+      clearInterval(interval);
+      log(`Found username: ${username}`);
 
-    GM_xmlhttpRequest({
-      method: "POST",
-      url: API_URL,
-      headers: { "Content-Type": "application/json" },
-      data: JSON.stringify({ username }),
-      onload: res => log("Response: " + res.responseText),
-      onerror: err => log("Request failed: " + err)
-    });
-  }, INTERVAL_MS);
-})();
+      if (typeof smartschool_webRequest === "function") {
+        smartschool_webRequest("POST", API_URL, { username })
+          .then(response => log("Response: " + JSON.stringify(response)))
+          .catch(err => log("Request failed: " + err));
+      } else {
+        log("❌ smartschool_webRequest is not available!");
+      }
 
+    }, INTERVAL_MS);
+  })();
 }
