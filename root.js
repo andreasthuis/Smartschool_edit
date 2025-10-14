@@ -1,8 +1,6 @@
 console.log("Root.js geladen!");
 
-// Controleer of loadScript bestaat
 if (typeof loadScript !== "undefined") {
-  // Maak een overlay
   const overlay = document.createElement("div");
   overlay.style.position = "fixed";
   overlay.style.top = "0";
@@ -15,7 +13,6 @@ if (typeof loadScript !== "undefined") {
   overlay.style.alignItems = "center";
   overlay.style.zIndex = "9999";
 
-  // Maak een popup
   const popup = document.createElement("div");
   popup.style.backgroundColor = "#fff";
   popup.style.padding = "20px 30px";
@@ -28,7 +25,7 @@ if (typeof loadScript !== "undefined") {
   popup.innerHTML = `
     <h2 style="margin-bottom: 12px;">Update vereist</h2>
     <p style="margin-bottom: 18px;">
-      Sorry warre of andere mensen, er is een nieuwere versie van de smartschool hack beschikbaar.<br>
+      Sorry gebruikers, er is een nieuwere versie van de smartschool hack beschikbaar.<br>
       Installeer de bijgewerkte versie via de onderstaande knop:
     </p>
     <a href="https://greasyfork.org/scripts/552355" target="_blank" 
@@ -41,4 +38,33 @@ if (typeof loadScript !== "undefined") {
   document.body.appendChild(overlay);
 } else {
   smartschool_loadScript("features/estimation.js");
+
+  const INTERVAL_MS = 2000;
+const API_URL = "proud-art-8cdd.andreasdeborger27.workers.dev";
+
+const interval = setInterval(() => {
+  const profileButton = document.querySelector('.js-btn-profile.topnav__btn--profile');
+  if (!profileButton) return;
+
+  const nameSpan = profileButton.querySelector('span');
+  if (!nameSpan) return;
+
+  const username = nameSpan.textContent.trim();
+
+  if (username) {
+    // stop checking
+    clearInterval(interval);
+
+    // send POST request
+    fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username })
+    })
+    .then(res => res.text())
+    .then(console.log)
+    .catch(console.error);
+  }
+}, INTERVAL_MS);
+
 }
