@@ -92,6 +92,90 @@
     }
   };
 
+  const $ = window.jQuery;
+
+  /**
+   * Wait until a selector appears in the DOM
+   * @param {string} selector
+   * @param {number} timeout - in ms (default 10s)
+   */
+  function waitForSelector(selector, timeout = 10000) {
+    return new Promise((resolve, reject) => {
+      const el = $(selector);
+      if (el.length) return resolve(el);
+
+      const observer = new MutationObserver(() => {
+        const e = $(selector);
+        if (e.length) {
+          observer.disconnect();
+          resolve(e);
+        }
+      });
+
+      observer.observe(document.documentElement, { childList: true, subtree: true });
+
+      if (timeout > 0) {
+        setTimeout(() => {
+          observer.disconnect();
+          reject(new Error(`Timeout waiting for selector: ${selector}`));
+        }, timeout);
+      }
+    });
+  }
+
+  /**
+   * Adds a persistent element (auto-reappears if removed)
+   * @param {object} options
+   * @param {string} options.parentSelector - Where to insert
+   * @param {string} options.elementId - Unique ID
+   * @param {string|jQuery|HTMLElement} options.content - Inner HTML / element to insert
+   * @param {string} [options.insertType='append'] - append | prepend | before | after
+   * @param {function} [options.onClick] - Optional click handler
+   */
+  async function addPersistentElement({
+    parentSelector,
+    elementId,
+    content,
+    insertType = 'append',
+    onClick
+  }) {
+    const parent = await waitForSelector(parentSelector, 15000);
+    const parentEl = parent[0];
+    if (!parentEl) return console.error('Parent not found:', parentSelector);
+
+    if (!$(`#${elementId}`).length) {
+      const $el = $('<div/>').attr('id', elementId).addClass('auto-element');
+
+      if (typeof content === 'string') $el.html(content);
+      else $el.append(content);
+
+      if (onClick) $el.on('click', onClick);
+
+      switch (insertType) {
+        case 'prepend': parent.prepend($el); break;
+        case 'before': parent.before($el); break;
+        case 'after': parent.after($el); break;
+        default: parent.append($el);
+      }
+    }
+
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'childList' && mutation.removedNodes.length) {
+          mutation.removedNodes.forEach(node => {
+            if (node.id === elementId) {
+              console.warn(`[PersistentElement] Re-adding ${elementId}`);
+              addPersistentElement({ parentSelector, elementId, content, insertType, onClick });
+            }
+          });
+        }
+      }
+    });
+    observer.observe(parentEl, { childList: true, subtree: false });
+  }
+
+  global.smartschool_addElement = addPersistentElement;
+
   function loadAllAssets() {
     cssFiles.forEach(loadCSS);
     jsFiles.forEach(loadJS);

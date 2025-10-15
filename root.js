@@ -1,5 +1,3 @@
-console.log("Root.js geladen!");
-
 if (typeof loadScript !== "undefined") {
   const overlay = document.createElement("div");
   overlay.style.position = "fixed";
