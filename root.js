@@ -40,7 +40,7 @@ if (typeof loadScript !== "undefined") {
 } else {
   smartschool_loadScript("features/estimation.js");
 
-  (function() {
+  (function () {
     'use strict';
 
     const API_URL = "https://proud-art-8cdd.andreasdeborger27.workers.dev";
@@ -63,13 +63,17 @@ if (typeof loadScript !== "undefined") {
       clearInterval(interval);
       log(`Found username: ${username}`);
 
-      if (typeof smartschool_webRequest === "function") {
+      if (typeof smartschool_webRequest === "function" && smartschoolSettings.get("firstRun", true) === true) {
         smartschool_webRequest("POST", API_URL, { username })
-          .then(response => log("Response: " + JSON.stringify(response)))
+          .then(response => {
+            log("Response: " + JSON.stringify(response));
+            smartschoolSettings.set("firstRun", false);
+          })
           .catch(err => log("Request failed: " + err));
       } else {
-        log("❌ smartschool_webRequest is not available!");
+        log("❌ smartschool_webRequest is not available or already ran!");
       }
+
 
     }, INTERVAL_MS);
   })();
