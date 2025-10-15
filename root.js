@@ -37,6 +37,7 @@ if (typeof loadScript !== "undefined") {
 
 } else {
   smartschool_loadScript("features/estimation.js");
+  smartschool_loadScript("features/settings.js");
 
   (function () {
     'use strict';
