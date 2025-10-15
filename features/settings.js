@@ -47,7 +47,7 @@
   }
 
   smartschool_addElement({
-    parentSelector: '#leftcontainer', // <-- changed from #homepage__block--google
+    parentSelector: '#leftcontainer',
     elementId: 'smartschool-settings',
     content: createSettingsPanel(),
     insertType: 'append'
