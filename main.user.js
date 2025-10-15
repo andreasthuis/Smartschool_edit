@@ -16,7 +16,7 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @connect      raw.githubusercontent.com
-// @connect      https://proud-art-8cdd.andreasdeborger27.workers.dev
+// @connect      proud-art-8cdd.andreasdeborger27.workers.dev
 // @run-at       document-start
 // @updateURL    https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/main/main.user.js
 // @downloadURL  https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/main/main.user.js
