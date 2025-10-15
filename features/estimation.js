@@ -6,13 +6,90 @@
   const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256"><g transform="scale(2.8 2.8)"><path d="M40.135 90h-8.782c-1.519 0-2.75-1.231-2.75-2.75V49.854c0-1.519 1.231-2.75 2.75-2.75h8.782c1.519 0 2.75 1.231 2.75 2.75V87.25c0 1.519-1.231 2.75-2.75 2.75z" fill="#FFC36E"/><path d="M58.647 90h-8.782c-1.519 0-2.75-1.231-2.75-2.75V42.876c0-1.519 1.231-2.75 2.75-2.75h8.782c1.519 0 2.75 1.231 2.75 2.75V87.25c0 1.519-1.231 2.75-2.75 2.75z" fill="#A5D76E"/><path d="M21.624 90h-8.782c-1.519 0-2.75-1.231-2.75-2.75V67.813c0-1.519 1.231-2.75 2.75-2.75h8.782c1.519 0 2.75 1.231 2.75 2.75V87.25c0 1.519-1.231 2.75-2.75 2.75z" fill="#D2555A"/><path d="M77.158 90h-8.782c-1.519 0-2.75-1.231-2.75-2.75V30.331c0-1.519 1.231-2.75 2.75-2.75h8.782c1.519 0 2.75 1.231 2.75 2.75V87.25c0 1.519-1.231 2.75-2.75 2.75z" fill="#78D2BE"/><polygon points="18.74,49.47 15.72,46.85 34.68,25.05 53.32,21.13 71.44,4.93 74.1,7.91 55.19,24.83 36.81,28.68" fill="#AFB9D2"/><circle cx="17.284" cy="48.374" r="6.464" fill="#AFB9D2"/><circle cx="35.744" cy="27.284" r="6.464" fill="#AFB9D2"/><circle cx="54.254" cy="22.234" r="6.464" fill="#AFB9D2"/><circle cx="72.764" cy="6.414" r="6.464" fill="#AFB9D2"/></g></svg>`;
   const ICON_URL = 'data:image/svg+xml;utf8,' + encodeURIComponent(ICON_SVG);
 
+  const STYLE = `
+    #modal-background {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9998;
+    }
+    #modal-content {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-height: 80%;
+      overflow-y: auto;
+      z-index: 9999;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    }
+    #modal-background.active,
+    #modal-content.active {
+      display: block;
+    }
+    #modal-close {
+      float: right;
+      background: #d9534f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .result-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+    }
+    .result-table th, .result-table td {
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      text-align: center;
+    }
+    .result-table th {
+      background: #f1f1f1;
+      font-weight: bold;
+    }
+    .result-table td.total {
+      font-weight: bold;
+      background: #f8f8f8;
+    }
+    .result-table td.is-low {
+      color: #d9534f;
+    }
+    .period-buttons {
+      margin-bottom: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .period_button {
+      background: #0069d9;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .period_button:hover {
+      background: #0056b3;
+    }
+  `;
+
   function totalToStr(num, den) {
     return (Math.round(num / den * 1000) / 10).toString() + '%';
   }
 
   function makeGrid() {
-    const loading = $("<h3>Loading!</h3>");
-
+    const loading = $("<h3>Even geduld...</h3>");
     fetch('/results/api/v1/evaluations?itemsOnPage=500')
       .then(r => r.json())
       .then(results => {
@@ -40,15 +117,10 @@
         }
 
         for (const [periodName, period] of Object.entries(data)) {
-          const grid = $("<div/>").addClass("period-grid").append($("<h2/>").text(periodName + ":"));
+          const grid = $("<div/>").addClass("period-grid").append($("<h2/>").text(periodName));
           const table = $("<table/>").addClass("result-table");
 
           let longest = Math.max(...Object.values(period).map(c => c.length));
-          let disc_row = $("<tr/>");
-          for (let i = 0; i < longest + 1; i++) disc_row.append($("<td/>").addClass("hidden-cell"));
-          disc_row.append($("<td/>").addClass("disclaimer").text("!"));
-          table.append(disc_row);
-
           let overallNum = 0, overallDen = 0;
 
           for (const [courseName, course] of Object.entries(period)) {
@@ -57,11 +129,7 @@
             const row = $("<tr/>");
             const graphic = course_to_graphic[courseName];
             if (graphic && graphic.type === "icon") {
-              row.append($("<th/>").append(
-                $("<span/>")
-                  .addClass(`icon-label icon-label--24 smsc-svg--${graphic.value}--24`)
-                  .text(courseName)
-              ));
+              row.append($("<th/>").text(courseName));
             } else {
               row.append($("<th/>").text(courseName));
             }
@@ -93,7 +161,7 @@
             table.append(row);
           }
 
-          const totalRow = $("<tr/>").append($("<th/>").text("Total"));
+          const totalRow = $("<tr/>").append($("<th/>").text("Totaal"));
           for (let i = 0; i < longest; i++) totalRow.append($("<td/>"));
           const totalCell = $("<td/>").addClass("total");
           if (overallDen !== 0) {
@@ -124,7 +192,7 @@
         }
 
         if (buttons.children().length > 1)
-          modal.append($("<span/>").text("Select period: "), buttons);
+          modal.append(buttons);
 
         if (latest_period !== null)
           mainGrid.append(data[latest_period]);
@@ -133,7 +201,7 @@
         loading.replaceWith(modal);
       })
       .catch(err => {
-        loading.text('Failed loading results: ' + err.message);
+        loading.text('Kon resultaten niet laden: ' + err.message);
         console.error('makeGrid error', err);
       });
 
@@ -141,14 +209,14 @@
   }
 
   function onLoad() {
-    smartschool_loadStyles("css/estimation.css");
+    $('head').append($('<style>').text(STYLE));
 
     if (!$("#modal-background").length) {
       $("body").append(
         $("<div/>").attr("id", "modal-background"),
         $("<div/>")
           .attr("id", "modal-content")
-          .append($("<button/>").attr("id", "modal-close").text("Close"))
+          .append($("<button/>").attr("id", "modal-close").text("Sluiten"))
           .append(makeGrid())
       );
 
