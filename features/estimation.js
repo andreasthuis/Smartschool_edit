@@ -3,215 +3,158 @@
 
   const $ = window.jQuery;
 
-  const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve"><g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)"><path d="M 40.135 90 h -8.782 c -1.519 0 -2.75 -1.231 -2.75 -2.75 V 49.854 c 0 -1.519 1.231 -2.75 2.75 -2.75 h 8.782 c 1.519 0 2.75 1.231 2.75 2.75 V 87.25 C 42.885 88.769 41.654 90 40.135 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,195,110); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"/><path d="M 58.647 90 h -8.782 c -1.519 0 -2.75 -1.231 -2.75 -2.75 V 42.876 c 0 -1.519 1.231 -2.75 2.75 -2.75 h 8.782 c 1.519 0 2.75 1.231 2.75 2.75 V 87.25 C 61.397 88.769 60.165 90 58.647 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(165,215,110); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"/><path d="M 21.624 90 h -8.782 c -1.519 0 -2.75 -1.231 -2.75 -2.75 V 67.813 c 0 -1.519 1.231 -2.75 2.75 -2.75 h 8.782 c 1.519 0 2.75 1.231 2.75 2.75 V 87.25 C 24.374 88.769 23.142 90 21.624 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(210,85,90); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"/><path d="M 77.158 90 h -8.782 c -1.519 0 -2.75 -1.231 -2.75 -2.75 V 30.331 c 0 -1.519 1.231 -2.75 2.75 -2.75 h 8.782 c 1.519 0 2.75 1.231 2.75 2.75 V 87.25 C 79.908 88.769 78.677 90 77.158 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(120,210,190); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"/><polygon points="18.74,49.47 15.72,46.85 34.68,25.05 53.32,21.13 71.44,4.93 74.1,7.91 55.19,24.83 36.81,28.68 " style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(175,185,210); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/><circle cx="17.284" cy="48.373999999999995" r="6.464" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(175,185,210); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/><circle cx="35.744" cy="27.284" r="6.464" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(175,185,210); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/><circle cx="54.254" cy="22.234" r="6.464" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(175,185,210); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/><circle cx="72.764" cy="6.414000000000001" r="6.464" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(175,185,210); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/></g></svg>`;
+  const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256"><g transform="scale(2.8 2.8)"><path d="M40.135 90h-8.782c-1.519 0-2.75-1.231-2.75-2.75V49.854c0-1.519 1.231-2.75 2.75-2.75h8.782c1.519 0 2.75 1.231 2.75 2.75V87.25c0 1.519-1.231 2.75-2.75 2.75z" fill="#FFC36E"/><path d="M58.647 90h-8.782c-1.519 0-2.75-1.231-2.75-2.75V42.876c0-1.519 1.231-2.75 2.75-2.75h8.782c1.519 0 2.75 1.231 2.75 2.75V87.25c0 1.519-1.231 2.75-2.75 2.75z" fill="#A5D76E"/><path d="M21.624 90h-8.782c-1.519 0-2.75-1.231-2.75-2.75V67.813c0-1.519 1.231-2.75 2.75-2.75h8.782c1.519 0 2.75 1.231 2.75 2.75V87.25c0 1.519-1.231 2.75-2.75 2.75z" fill="#D2555A"/><path d="M77.158 90h-8.782c-1.519 0-2.75-1.231-2.75-2.75V30.331c0-1.519 1.231-2.75 2.75-2.75h8.782c1.519 0 2.75 1.231 2.75 2.75V87.25c0 1.519-1.231 2.75-2.75 2.75z" fill="#78D2BE"/><polygon points="18.74,49.47 15.72,46.85 34.68,25.05 53.32,21.13 71.44,4.93 74.1,7.91 55.19,24.83 36.81,28.68" fill="#AFB9D2"/><circle cx="17.284" cy="48.374" r="6.464" fill="#AFB9D2"/><circle cx="35.744" cy="27.284" r="6.464" fill="#AFB9D2"/><circle cx="54.254" cy="22.234" r="6.464" fill="#AFB9D2"/><circle cx="72.764" cy="6.414" r="6.464" fill="#AFB9D2"/></g></svg>`;
   const ICON_URL = 'data:image/svg+xml;utf8,' + encodeURIComponent(ICON_SVG);
 
-  function waitForSelector(selector, timeout = 10000) {
-    return new Promise((resolve, reject) => {
-      const el = $(selector);
-      if (el.length) return resolve(el);
-      const observer = new MutationObserver(() => {
-        const e = $(selector);
-        if (e.length) {
-          observer.disconnect();
-          resolve(e);
-        }
-      });
-      observer.observe(document.documentElement, { childList: true, subtree: true });
-      if (timeout > 0) {
-        setTimeout(() => {
-          observer.disconnect();
-          reject(new Error('Timeout waiting for selector: ' + selector));
-        }, timeout);
-      }
-    });
-  }
-
-  function addButton() {
-    if ($("#show-grid").length) return;
-
-    $(".wide-toolbar").append(
-      $("<button/>")
-        .attr("id", "show-grid")
-        .addClass("wide-toolbar__item")
-        .append(
-          $("<img/>").addClass("wide-toolbar__item__icon").attr("src", ICON_URL)
-        ).append(
-          $("<span/>").addClass("wide-toolbar__item__name").text("Overzicht")
-        ).click(openGrid)
-    );
-  }
-
-  function totalToStr(total_numerator, total_denominator) {
-    return (Math.round(total_numerator / total_denominator * 1000) / 10).toString() + '%';
+  function totalToStr(num, den) {
+    return (Math.round(num / den * 1000) / 10).toString() + '%';
   }
 
   function makeGrid() {
-    let loading = $("<h3>Loading!</h3>");
-    fetch('/results/api/v1/evaluations?itemsOnPage=500').then(r => r.json()).then(results => {
-      let data = {};
-      let course_to_graphic = {};
-      let latest_period = null;
-      for (const result of results) {
-        if (result["type"] != "normal") {
-          continue;
-        }
-        let period = result["period"]["name"];
-        if (latest_period === null) {
-          latest_period = period;
-        }
-        if (!(period in data)) {
-          data[period] = {};
-        }
+    const loading = $("<h3>Loading!</h3>");
 
-        period = data[period];
-        for (const course of result["courses"]) {
-          course_to_graphic[course["name"]] = course["graphic"];
-          const course_name = course["name"];
-          if (!(course_name in period)) {
-            period[course_name] = [];
-          }
-          period[course_name].push({ "date": result["date"], "name": result["name"], "graphic": result["graphic"] });
-        }
-      }
+    fetch('/results/api/v1/evaluations?itemsOnPage=500')
+      .then(r => r.json())
+      .then(results => {
+        const data = {};
+        const course_to_graphic = {};
+        let latest_period = null;
 
-      for (let period_name of Object.keys(data)) {
-        let period = data[period_name];
+        for (const result of results) {
+          if (result["type"] !== "normal") continue;
+          let period = result["period"]["name"];
+          if (latest_period === null) latest_period = period;
+          if (!(period in data)) data[period] = {};
+          const periodObj = data[period];
 
-        let grid = $("<div/>").attr("id", "period").append($("<h2/>").text(period_name + ":"));
-        let table = $("<table/>").attr("id", "result-table");
-
-        let longest = 0;
-        for (let [_, course] of Object.entries(period)) {
-          course.sort((a, b) => { return a["date"].localeCompare(b["date"]); });
-          if (course.length > longest) {
-            longest = course.length;
+          for (const course of result["courses"]) {
+            course_to_graphic[course["name"]] = course["graphic"];
+            const name = course["name"];
+            if (!(name in periodObj)) periodObj[name] = [];
+            periodObj[name].push({
+              date: result["date"],
+              name: result["name"],
+              graphic: result["graphic"]
+            });
           }
         }
-        let disc_row = $("<tr/>");
-        for (let i = 0; i < longest + 1; i++) {
-          disc_row.append($("<td/>").addClass("hidden-cell"));
-        }
-        disc_row.append($("<td/>").attr("id", "disclamer").text("!"));
-        table.append(disc_row);
 
-        let overallTotalNumerator = 0;
-        let overallTotalDenominator = 0;
+        for (const [periodName, period] of Object.entries(data)) {
+          const grid = $("<div/>").addClass("period-grid").append($("<h2/>").text(periodName + ":"));
+          const table = $("<table/>").addClass("result-table");
 
-        for (let [course_name, course] of Object.entries(period)) {
-          let row = $("<tr/>");
-          if (course_to_graphic[course_name] && course_to_graphic[course_name].type == "icon") {
-            row.append($("<th/>").append(
-              $("<span/>")
-                .addClass("icon-label icon-label--24 smsc-svg--" + course_to_graphic[course_name]["value"] + "--24")
-                .text(course_name)
-            ));
-          } else {
-            row.append($("<th/>").text(course_name));
-          }
+          let longest = Math.max(...Object.values(period).map(c => c.length));
+          let disc_row = $("<tr/>");
+          for (let i = 0; i < longest + 1; i++) disc_row.append($("<td/>").addClass("hidden-cell"));
+          disc_row.append($("<td/>").addClass("disclaimer").text("!"));
+          table.append(disc_row);
 
-          let total_numerator = 0;
-          let total_denominator = 0;
+          let overallNum = 0, overallDen = 0;
 
-          for (const result of course) {
-            const desc = result["graphic"]["description"];
-            const color = result["graphic"]["color"];
-            const name = result["name"];
-            let cellDesc = desc || "/";  // If desc is empty, use "/"
+          for (const [courseName, course] of Object.entries(period)) {
+            course.sort((a, b) => a.date.localeCompare(b.date));
 
-            row.append($("<td/>")
-              .addClass("c-" + color + "-combo--300")
-              .attr({ id: "details", content: name })
-              .text(cellDesc));
-
-            let match = (desc || "").match(/^([\d\,\.]+)\/([\d\,\.]+)$/);
-            if (match) {
-              total_numerator += parseFloat(match[1].replace(',', '.'));
-              total_denominator += parseFloat(match[2].replace(',', '.'));
+            const row = $("<tr/>");
+            const graphic = course_to_graphic[courseName];
+            if (graphic && graphic.type === "icon") {
+              row.append($("<th/>").append(
+                $("<span/>")
+                  .addClass(`icon-label icon-label--24 smsc-svg--${graphic.value}--24`)
+                  .text(courseName)
+              ));
+            } else {
+              row.append($("<th/>").text(courseName));
             }
-          }
 
-          for (let i = 0; i < longest - course.length; i++) {
-            row.append($("<td/>"));
-          }
-
-          let last_cell = $("<td/>").addClass("total");
-          if (total_denominator != 0) {
-            last_cell.text(totalToStr(total_numerator, total_denominator));
-            if (total_numerator / total_denominator < 0.5) {
-              last_cell.addClass('is-low');
+            let num = 0, den = 0;
+            for (const res of course) {
+              const desc = res.graphic.description || "/";
+              const color = res.graphic.color;
+              row.append(
+                $("<td/>").addClass(`c-${color}-combo--300`).attr("title", res.name).text(desc)
+              );
+              const match = (desc || "").match(/^([\d.,]+)\/([\d.,]+)$/);
+              if (match) {
+                num += parseFloat(match[1].replace(',', '.'));
+                den += parseFloat(match[2].replace(',', '.'));
+              }
             }
+
+            for (let i = 0; i < longest - course.length; i++) row.append($("<td/>"));
+
+            const totalCell = $("<td/>").addClass("total");
+            if (den !== 0) {
+              totalCell.text(totalToStr(num, den));
+              if (num / den < 0.5) totalCell.addClass("is-low");
+            }
+            row.append(totalCell);
+            overallNum += num;
+            overallDen += den;
+            table.append(row);
           }
-          row.append(last_cell);
 
-          overallTotalNumerator += total_numerator;
-          overallTotalDenominator += total_denominator;
-
-          table.append(row);
-        }
-
-        let overallTotalRow = $("<tr/>");
-        overallTotalRow.append($("<th/>").text("Total"));
-        for (let i = 0; i < longest; i++) {
-          overallTotalRow.append($("<td/>"));
-        }
-        let overallTotalCell = $("<td/>").addClass("total");
-        if (overallTotalDenominator != 0) {
-          overallTotalCell.text(totalToStr(overallTotalNumerator, overallTotalDenominator));
-          if (overallTotalNumerator / overallTotalDenominator < 0.5) {
-            overallTotalCell.addClass('is-low');
+          const totalRow = $("<tr/>").append($("<th/>").text("Total"));
+          for (let i = 0; i < longest; i++) totalRow.append($("<td/>"));
+          const totalCell = $("<td/>").addClass("total");
+          if (overallDen !== 0) {
+            totalCell.text(totalToStr(overallNum, overallDen));
+            if (overallNum / overallDen < 0.5) totalCell.addClass("is-low");
           }
+          totalRow.append(totalCell);
+          table.append(totalRow);
+
+          grid.append($("<div/>").addClass("table-container").append(table));
+          data[periodName] = grid;
         }
-        overallTotalRow.append(overallTotalCell);
-        table.append(overallTotalRow);
 
-        grid.append($("<div/>").attr("id", "table-container").append(table));
-        data[period_name] = grid;
-      }
+        const modal = $("<div/>").attr("id", "content-container");
+        const buttons = $("<div/>").addClass("period-buttons");
+        const mainGrid = $("<div/>").attr("id", "period-container");
 
-      let modal = $("<div/>").attr("id", "content-container");
-      let period_buttons = $("<div/>");
-      let main_grid = $("<div/>").attr("id", "period-container");
-      for (let [period_name, grid] of Object.entries(data).reverse()) {
-        period_buttons.append($("<button/>").addClass("period_button").text(period_name).click(((grid) => {
-          return () => {
-            main_grid.empty();
-            main_grid.append(grid);
-          };
-        })(grid)));
-      }
-      if (period_buttons.children().length > 1) {
-        period_buttons.prepend($("<span/>").text("Select period: "));
-        modal.append(period_buttons);
-      }
+        for (const [periodName, grid] of Object.entries(data).reverse()) {
+          buttons.append(
+            $("<button/>")
+              .addClass("period_button")
+              .text(periodName)
+              .click(() => {
+                mainGrid.empty();
+                mainGrid.append(grid);
+              })
+          );
+        }
 
-      if (latest_period !== null) {
-        main_grid.append(data[latest_period]);
-      }
-      modal.append(main_grid);
-      loading.replaceWith(modal);
-    }).catch(err => {
-      loading.text('Failed loading results: ' + err.message);
-      console.error('makeGrid error', err);
-    });
+        if (buttons.children().length > 1)
+          modal.append($("<span/>").text("Select period: "), buttons);
+
+        if (latest_period !== null)
+          mainGrid.append(data[latest_period]);
+
+        modal.append(mainGrid);
+        loading.replaceWith(modal);
+      })
+      .catch(err => {
+        loading.text('Failed loading results: ' + err.message);
+        console.error('makeGrid error', err);
+      });
+
     return loading;
   }
 
   function onLoad() {
     smartschool_loadStyles("css/estimation.css");
-    
-    if ($("#modal-background").length === 0) {
+
+    if (!$("#modal-background").length) {
       $("body").append(
-        $("<div/>").attr("id", "modal-background")
-      ).append(
-        $("<div/>").attr("id", "modal-content").append(
-          $("<button/>").attr("id", "modal-close").text("Close")
-        ).append(makeGrid())
+        $("<div/>").attr("id", "modal-background"),
+        $("<div/>")
+          .attr("id", "modal-content")
+          .append($("<button/>").attr("id", "modal-close").text("Close"))
+          .append(makeGrid())
       );
 
-      $("#modal-background, #modal-close").click(function () {
-        $("#modal-content, #modal-background").toggleClass("active");
-      });
+      $("#modal-background, #modal-close").click(() =>
+        $("#modal-content, #modal-background").toggleClass("active")
+      );
     }
   }
 
@@ -219,47 +162,21 @@
     $("#modal-content, #modal-background").toggleClass("active");
   }
 
-  let wideToolbarCallback = function (mutationsList) {
-    for (let mutation of mutationsList) {
-      if (mutation.type === 'childList' && mutation.removedNodes.length !== 0) {
-        for (const node of mutation.removedNodes) {
-          if (node.id === "show-grid") {
-            $(".wide-toolbar").append(node);
-          }
-        }
-      }
-    }
-  };
-  let wideToolbarObserver = new MutationObserver(wideToolbarCallback);
-
-  let smscMainCallback = function (mutationsList, observer) {
-    for (let mutation of mutationsList) {
-      if (mutation.type === 'childList' && mutation.addedNodes.length === 1 && mutation.addedNodes[0].classList && mutation.addedNodes[0].classList.contains('wide-toolbar')) {
-        observer.disconnect();
-        const wt = $('.wide-toolbar')[0];
-        if (wt) {
-          wideToolbarObserver.observe(wt, { attributes: false, childList: true, subtree: false });
-        }
-        onLoad();
-        addButton();
-      }
-    }
-  };
-
   (async function init() {
     try {
-      const $smsc = await waitForSelector('#smscMain', 15000);
-      if ($('.wide-toolbar').length) {
-        const wt = $('.wide-toolbar')[0];
-        wideToolbarObserver.observe(wt, { attributes: false, childList: true, subtree: false });
-        onLoad();
-        addButton();
-      } else {
-        const smscMainObserver = new MutationObserver(smscMainCallback);
-        smscMainObserver.observe($smsc[0], { attributes: false, childList: true, subtree: false });
-      }
+      await smartschool_addElement({
+        parentSelector: ".wide-toolbar",
+        elementId: "show-grid",
+        content: $("<button/>")
+          .addClass("wide-toolbar__item")
+          .append($("<img/>").addClass("wide-toolbar__item__icon").attr("src", ICON_URL))
+          .append($("<span/>").addClass("wide-toolbar__item__name").text("Overzicht")),
+        onClick: openGrid
+      });
+
+      onLoad();
     } catch (err) {
-      console.error('Smartschool Grid: failed to initialize:', err);
+      console.error("Smartschool Grid failed:", err);
     }
   })();
 
