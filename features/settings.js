@@ -9,9 +9,6 @@
       .addClass('settings-panel')
       .css({
         padding: '10px',
-        background: '#f9f9f9',
-        border: '1px solid #ccc',
-        borderRadius: '10px',
         marginTop: '10px',
         textAlign: 'left',
       });
