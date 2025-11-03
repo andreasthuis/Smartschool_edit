@@ -1,4 +1,4 @@
-if (typeof loadScript !== "undefined") {
+if (typeof smartschoolSetttings !== "undefined") {
   const overlay = document.createElement("div");
   overlay.style.position = "fixed";
   overlay.style.top = "0";
