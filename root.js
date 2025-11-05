@@ -1,4 +1,4 @@
-if (not typeof smartschoolSettings !== "undefined") {
+if (typeof smartschoolSettings === "undefined") {
   const overlay = document.createElement("div");
   overlay.style.position = "fixed";
   overlay.style.top = "0";
