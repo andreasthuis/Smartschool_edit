@@ -1,7 +1,8 @@
 (async () => {
   const $ = window.jQuery;
 
-  const response = await fetch(
+  const response = await smartschool_webRequest(
+    "GET",
     'https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/refs/heads/main/html/settingsElement.html'
   );
   const html = await response.text();
