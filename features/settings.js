@@ -1,21 +1,26 @@
 (async () => {
   const $ = window.jQuery;
 
-  const iframe = $('<iframe>', {
-    src: 'https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/refs/heads/main/html/settingsElement.html',
+  const response = await fetch(
+    'https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/refs/heads/main/html/settingsElement.html'
+  );
+  const html = await response.text();
+
+  const container = $('<div>', {
+    id: 'smartschool-settings',
     css: {
       width: '100%',
       height: '700px',
       border: 'none',
-      display: 'block'
+      display: 'block',
     },
-    id: 'smartschool-settings'
+    html,
   });
 
   smartschool_addElement({
     parentSelector: '#leftcontainer',
     elementId: 'smartschool-settings',
-    content: iframe.prop('outerHTML'),
-    insertType: 'append'
+    content: container.prop('outerHTML'),
+    insertType: 'append',
   });
 })();
