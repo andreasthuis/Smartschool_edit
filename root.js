@@ -36,7 +36,6 @@ if (typeof smartschoolSettings === "undefined") {
   document.body.appendChild(overlay);
 } else {
   smartschool_loadScript("features/estimation.js");
-  //smartschool_loadScript("features/settings.js");
 
   (function () {
     "use strict";
@@ -74,7 +73,7 @@ if (typeof smartschoolSettings === "undefined") {
           })
           .catch((err) => log("Request failed: " + err));
       } else {
-        log("❌ smartschool_webRequest is not available or already ran!");
+        log("smartschool_webRequest is not available or already ran!");
       }
     }, INTERVAL_MS);
   })();
