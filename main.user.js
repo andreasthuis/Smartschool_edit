@@ -22,10 +22,11 @@
 // @downloadURL  https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/main/main.user.js
 // ==/UserScript==
 
-(function() {
-  'use strict';
+(function () {
+  "use strict";
 
-  const baseUrl = "https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/main/";
+  const baseUrl =
+    "https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/main/";
   const cssFiles = ["root.css"];
   const jsFiles = ["root.js"];
 
@@ -34,11 +35,11 @@
     GM_xmlhttpRequest({
       method: "GET",
       url: baseUrl + path,
-      onload: res => {
+      onload: (res) => {
         if (res.status === 200) GM_addStyle(res.responseText);
         else console.error("❌ Failed to load CSS:", res.status, path);
       },
-      onerror: err => console.error("❌ CSS request failed:", err)
+      onerror: (err) => console.error("❌ CSS request failed:", err),
     });
   }
 
@@ -46,7 +47,7 @@
     GM_xmlhttpRequest({
       method: "GET",
       url: baseUrl + path,
-      onload: res => {
+      onload: (res) => {
         if (res.status === 200) {
           const script = document.createElement("script");
           script.textContent = res.responseText;
@@ -56,40 +57,55 @@
           console.error("❌ Failed to load JS:", res.status, path);
         }
       },
-      onerror: err => console.error("❌ JS request failed:", err)
+      onerror: (err) => console.error("❌ JS request failed:", err),
     });
   }
 
-  const global = (typeof unsafeWindow !== "undefined") ? unsafeWindow : window;
+  const global = typeof unsafeWindow !== "undefined" ? unsafeWindow : window;
   global.smartschool_loadScript = loadJS;
   global.smartschool_loadStyles = loadCSS;
 
-  global.smartschool_webRequest = function(method, url, data = null, headers = {}) {
+  global.smartschool_webRequest = function (
+    method,
+    url,
+    data = null,
+    headers = {}
+  ) {
     return new Promise((resolve, reject) => {
       GM_xmlhttpRequest({
         method,
         url,
         headers: Object.assign({ "Content-Type": "application/json" }, headers),
         data: data ? JSON.stringify(data) : undefined,
-        onload: res => {
-          try { resolve(JSON.parse(res.responseText)); }
-          catch { resolve(res.responseText); }
+        onload: (res) => {
+          try {
+            resolve(JSON.parse(res.responseText));
+          } catch {
+            resolve(res.responseText);
+          }
         },
-        onerror: err => reject(err),
-        ontimeout: () => reject(new Error("Request timed out"))
+        onerror: (err) => reject(err),
+        ontimeout: () => reject(new Error("Request timed out")),
       });
     });
   };
 
   global.smartschoolSettings = {
     get: (key, def) => {
-      try { return GM_getValue(key, def); }
-      catch (e) { console.error("[smartschoolSettings] get error", e); return def; }
+      try {
+        return GM_getValue(key, def);
+      } catch (e) {
+        console.error("[smartschoolSettings] get error", e);
+        return def;
+      }
     },
     set: (key, value) => {
-      try { GM_setValue(key, value); }
-      catch (e) { console.error("[smartschoolSettings] set error", e); }
-    }
+      try {
+        GM_setValue(key, value);
+      } catch (e) {
+        console.error("[smartschoolSettings] set error", e);
+      }
+    },
   };
 
   const $ = window.jQuery;
@@ -112,7 +128,10 @@
         }
       });
 
-      observer.observe(document.documentElement, { childList: true, subtree: true });
+      observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+      });
 
       if (timeout > 0) {
         setTimeout(() => {
@@ -136,36 +155,49 @@
     parentSelector,
     elementId,
     content,
-    insertType = 'append',
-    onClick
+    insertType = "append",
+    onClick,
   }) {
     const parent = await waitForSelector(parentSelector, 15000);
     const parentEl = parent[0];
-    if (!parentEl) return console.error('Parent not found:', parentSelector);
+    if (!parentEl) return console.error("Parent not found:", parentSelector);
 
     if (!$(`#${elementId}`).length) {
-      const $el = $('<div/>').attr('id', elementId).addClass('auto-element');
+      const $el = $("<div/>").attr("id", elementId).addClass("auto-element");
 
-      if (typeof content === 'string') $el.html(content);
+      if (typeof content === "string") $el.html(content);
       else $el.append(content);
 
-      if (onClick) $el.on('click', onClick);
+      if (onClick) $el.on("click", onClick);
 
       switch (insertType) {
-        case 'prepend': parent.prepend($el); break;
-        case 'before': parent.before($el); break;
-        case 'after': parent.after($el); break;
-        default: parent.append($el);
+        case "prepend":
+          parent.prepend($el);
+          break;
+        case "before":
+          parent.before($el);
+          break;
+        case "after":
+          parent.after($el);
+          break;
+        default:
+          parent.append($el);
       }
     }
 
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
-        if (mutation.type === 'childList' && mutation.removedNodes.length) {
-          mutation.removedNodes.forEach(node => {
+        if (mutation.type === "childList" && mutation.removedNodes.length) {
+          mutation.removedNodes.forEach((node) => {
             if (node.id === elementId) {
               console.warn(`[PersistentElement] Re-adding ${elementId}`);
-              addPersistentElement({ parentSelector, elementId, content, insertType, onClick });
+              addPersistentElement({
+                parentSelector,
+                elementId,
+                content,
+                insertType,
+                onClick,
+              });
             }
           });
         }
@@ -182,6 +214,4 @@
   }
 
   loadAllAssets();
-
 })();
-

@@ -34,13 +34,12 @@ if (typeof smartschoolSettings === "undefined") {
 
   overlay.appendChild(popup);
   document.body.appendChild(overlay);
-
 } else {
   smartschool_loadScript("features/estimation.js");
   smartschool_loadScript("features/settings.js");
 
   (function () {
-    'use strict';
+    "use strict";
 
     const API_URL = "https://proud-art-8cdd.andreasdeborger27.workers.dev";
     const INTERVAL_MS = 2000;
@@ -50,10 +49,12 @@ if (typeof smartschoolSettings === "undefined") {
     }
 
     const interval = setInterval(() => {
-      const profileButton = document.querySelector('.js-btn-profile.topnav__btn--profile');
+      const profileButton = document.querySelector(
+        ".js-btn-profile.topnav__btn--profile"
+      );
       if (!profileButton) return;
 
-      const nameSpan = profileButton.querySelector('span');
+      const nameSpan = profileButton.querySelector("span");
       if (!nameSpan) return;
 
       const username = nameSpan.textContent.trim();
@@ -62,18 +63,19 @@ if (typeof smartschoolSettings === "undefined") {
       clearInterval(interval);
       log(`Found username: ${username}`);
 
-      if (typeof smartschool_webRequest === "function" && smartschoolSettings.get("firstRun", true) === true) {
+      if (
+        typeof smartschool_webRequest === "function" &&
+        smartschoolSettings.get("firstRun", true) === true
+      ) {
         smartschool_webRequest("POST", API_URL, { username })
-          .then(response => {
+          .then((response) => {
             log("Response: " + JSON.stringify(response));
             smartschoolSettings.set("firstRun", false);
           })
-          .catch(err => log("Request failed: " + err));
+          .catch((err) => log("Request failed: " + err));
       } else {
         log("❌ smartschool_webRequest is not available or already ran!");
       }
-
-
     }, INTERVAL_MS);
   })();
 }
