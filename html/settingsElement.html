@@ -1,348 +1,327 @@
-<div class="settings-container">
+<div id="smartschool-settings"></div>
+
+<script>
+(async () => {
+  const container = document.getElementById("smartschool-settings");
+  if (!container) return console.error("❌ Container not found");
+
+  // --- Create shadow root ---
+  const shadow = container.attachShadow({ mode: "open" });
+
+  // --- Shadow HTML content ---
+  shadow.innerHTML = `
     <style>
-        body {
-            font-family: "Segoe UI", Arial, sans-serif;
-            background: #f4f4f4;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            margin: 0;
-            padding: 40px 0;
-        }
+      :host {
+        all: initial;
+        font-family: "Segoe UI", Arial, sans-serif;
+        color: #333;
+        display: block;
+      }
 
-        .settings-container {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            width: 85%;
-            max-width: 800px;
-            padding: 20px 30px;
-            box-sizing: border-box;
-        }
+      .settings-container {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        width: 85%;
+        max-width: 800px;
+        padding: 20px 30px;
+        margin: 40px auto;
+        box-sizing: border-box;
+      }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #222;
-        }
+      h1 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #222;
+      }
 
-        .settings-section {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            margin-bottom: 14px;
-            background: #fafafa;
-        }
+      .settings-section {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        margin-bottom: 14px;
+        background: #fafafa;
+      }
 
-        .settings-section summary {
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 12px 16px;
-            background: #eaeaea;
-            border-radius: 10px;
-            user-select: none;
-        }
+      .settings-section summary {
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 12px 16px;
+        background: #eaeaea;
+        border-radius: 10px;
+        user-select: none;
+      }
 
-        .settings-section summary:hover {
-            background: #e0e0e0;
-        }
+      .settings-section summary:hover {
+        background: #e0e0e0;
+      }
 
-        .settings-div {
-            background-color: #fafafa;
-            border-radius: 10px;
-            padding: 16px 0px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+      .settings-div {
+        background-color: #fafafa;
+        border-radius: 10px;
+        padding: 16px 0px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
 
-        .settings-div h1 {
-            font-size: 18px;
-            margin: 0;
-            color: #333;
-        }
+      .settings-div h1 {
+        font-size: 18px;
+        margin: 0;
+        color: #333;
+      }
 
-        .settings-div quick-panel {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            gap: 10px;
-        }
+      .settings-div quick-panel {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 10px;
+      }
 
-        .settings-div quick-panel p {
-            margin: 0;
-            font-size: 14px;
-            color: #333;
-        }
+      .settings-div quick-panel p {
+        margin: 0;
+        font-size: 14px;
+        color: #333;
+      }
 
+      .gradient-container {
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+        padding: 14px 18px 20px;
+      }
 
-        .gradient-container {
-            display: flex;
-            gap: 10px;
-            flex-direction: column;
-            padding: 14px 18px 20px;
-        }
+      label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+      }
 
-        label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-        }
+      input[type="color"],
+      select {
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        background: #fff;
+        color: #333;
+        padding: 4px 6px;
+        cursor: pointer;
+        font-size: 13px;
+      }
 
-        input[type="color"],
-        select {
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            background: #fff;
-            color: #333;
-            padding: 4px 6px;
-            cursor: pointer;
-            font-size: 13px;
-        }
+      #colorList {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
 
-        #colorList {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
+      .button {
+        background: #f1f1f1;
+        color: #222;
+        border: 1px solid #bbb;
+        border-radius: 6px;
+        padding: 6px 10px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
 
-        .button {
-            background: #f1f1f1;
-            color: #222;
-            border: 1px solid #bbb;
-            border-radius: 6px;
-            padding: 6px 10px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
+      #addColor:hover {
+        background: #e0e0e0;
+      }
 
-        #addColor:hover {
-            background: #e0e0e0;
-        }
+      .preview-card {
+        border-radius: 8px;
+        overflow: hidden;
+        background: #ddd;
+      }
 
-        .preview-card {
-            border-radius: 8px;
-            overflow: hidden;
-            background: #ddd;
-        }
+      #preview {
+        width: 100%;
+        height: 150px;
+        border-radius: 5px;
+        transition: background 0.3s ease;
+      }
 
-        #preview {
-            width: 100%;
-            height: 150px;
-            border-radius: 5px;
-            transition: background 0.3s ease;
-        }
+      #saveBtn {
+        font-size: 16px;
+        font-weight: 600;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        width: 100%;
+        padding: 8px 14px;
+        background: #eaeaea;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
 
-        #saveBtn {
-            font-size: 16px;
-            font-weight: 600;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            width: 100%;
-            padding: 8px 14px;
-            background: #eaeaea;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        #saveBtn:hover {
-            background: #e0e0e0;
-        }
+      #saveBtn:hover {
+        background: #e0e0e0;
+      }
     </style>
-    <h1>Smartschool Instellingen</h1>
 
-    <details class="settings-section" open>
+    <div class="settings-container">
+      <h1>Smartschool Instellingen</h1>
+
+      <details class="settings-section" open>
         <summary>Navigatie</summary>
         <div class="settings-div">
-            <h1>Navigatie gradient</h1>
-            <div class="gradient-container">
-                <label>
-                    Richting:
-                    <select id="direction">
-                        <option value="to right" selected>→ Rechts</option>
-                        <option value="to left">← Links</option>
-                        <option value="to bottom">↓ Onder</option>
-                        <option value="to top">↑ Boven</option>
-                        <option value="to bottom right">↘ Diagonaal</option>
-                        <option value="to bottom left">↙ Diagonaal</option>
-                    </select>
-                </label>
+          <h1>Navigatie gradient</h1>
+          <div class="gradient-container">
+            <label>
+              Richting:
+              <select id="direction">
+                <option value="to right" selected>→ Rechts</option>
+                <option value="to left">← Links</option>
+                <option value="to bottom">↓ Onder</option>
+                <option value="to top">↑ Boven</option>
+                <option value="to bottom right">↘ Diagonaal</option>
+                <option value="to bottom left">↙ Diagonaal</option>
+              </select>
+            </label>
 
-                <div id="colorList">
-                    <input type="color" value="#2ca4d4" />
-                    <input type="color" value="#85e4f2" />
-                    <input type="color" value="#53a0ed" />
-                </div>
-                <button class="button" id="addColor">Voeg kleur toe</button>
-
-                <div class="preview-card">
-                    <div id="preview"></div>
-                </div>
+            <div id="colorList">
+              <input type="color" value="#2ca4d4" />
+              <input type="color" value="#85e4f2" />
+              <input type="color" value="#53a0ed" />
             </div>
+            <button class="button" id="addColor">Voeg kleur toe</button>
 
-            <div class="settings-div">
-                <h1>Ga Naar (Quick Panel)</h1>
-                <quick-panel setting="quick-panel">
-                    <p>Basis kleur:</p>
-                    <input type="color" value="#9de0ff" setting="base-color">
-                    <p>Text kleur:</p>
-                    <input type="color" value="#000000" setting="text-color">
-                </quick-panel>
+            <div class="preview-card">
+              <div id="preview"></div>
             </div>
-    </details>
+          </div>
 
-    <details class="settings-section" open>
+          <div class="settings-div">
+            <h1>Ga Naar (Quick Panel)</h1>
+            <quick-panel setting="quick-panel">
+              <p>Basis kleur:</p>
+              <input type="color" value="#9de0ff" setting="base-color">
+              <p>Text kleur:</p>
+              <input type="color" value="#000000" setting="text-color">
+            </quick-panel>
+          </div>
+        </div>
+      </details>
+
+      <details class="settings-section" open>
         <summary>Punten</summary>
         <div class="settings-div">
-            <h1>Punten overzicht</h1>
-            <quick-panel setting="estimation">
-                <p>Staat aan:</p>
-                <input type="checkbox" checked setting="enabled">
-            </quick-panel>
+          <h1>Punten overzicht</h1>
+          <quick-panel setting="estimation">
+            <p>Staat aan:</p>
+            <input type="checkbox" checked setting="enabled">
+          </quick-panel>
         </div>
-    </details>
+      </details>
 
-    <button id="saveBtn">Opslaan</button>
+      <button id="saveBtn">Opslaan</button>
+    </div>
+  `;
 
-    <script>
-        window.addEventListener("DOMContentLoaded", async () => {
-            await loadAllSettings();
-            setupDynamicListeners();
+  // --- Scoped JS logic inside shadow root ---
+  const qs = (sel) => shadow.querySelector(sel);
+  const qsa = (sel) => shadow.querySelectorAll(sel);
+
+  async function handlePreviewUpdate() {
+    const directionEl = qs("#direction");
+    const preview = qs("#preview");
+    if (!preview || !directionEl) return;
+
+    const direction = directionEl.value;
+    const colors = Array.from(qsa("#colorList input[type='color']")).map(i => i.value);
+    preview.style.background = `linear-gradient(${direction}, ${colors.join(", ")})`;
+  }
+
+  async function saveAllSettings() {
+    if (typeof smartschoolSettings === "undefined" || !smartschoolSettings.set) {
+      alert("⚠️ smartschoolSettings API niet gevonden!");
+      return;
+    }
+
+    const allSettings = {};
+    qsa("quick-panel[setting]").forEach(panel => {
+      const group = panel.getAttribute("setting");
+      const groupSettings = {};
+      panel.querySelectorAll("[setting]").forEach(el => {
+        const key = el.getAttribute("setting");
+        if (!key) return;
+        groupSettings[key] = el.type === "checkbox" ? el.checked : el.value;
+      });
+      allSettings[group] = groupSettings;
+    });
+
+    const navigation = {
+      direction: qs("#direction").value,
+      colors: Array.from(qsa("#colorList input[type='color']")).map(i => i.value)
+    };
+    allSettings.navigation = navigation;
+
+    await smartschoolSettings.set("settings", allSettings);
+    const saveBtn = qs("#saveBtn");
+    saveBtn.textContent = "✅ Opgeslagen!";
+    setTimeout(() => (saveBtn.textContent = "Opslaan"), 1500);
+  }
+
+  async function loadAllSettings() {
+    if (typeof smartschoolSettings === "undefined" || !smartschoolSettings.get) return;
+    const settings = await smartschoolSettings.get("gradient_nav");
+    if (!settings) return;
+
+    if (settings.navigation) {
+      const { direction, colors } = settings.navigation;
+      const dirSelect = qs("#direction");
+      if (dirSelect) dirSelect.value = direction || "to right";
+      const colorList = qs("#colorList");
+      if (colorList) {
+        colorList.innerHTML = "";
+        (colors || ["#2ca4d4", "#85e4f2", "#53a0ed"]).forEach(c => {
+          const input = document.createElement("input");
+          input.type = "color";
+          input.value = c;
+          colorList.appendChild(input);
         });
+      }
+    }
 
-        const saveBtn = document.getElementById("saveBtn");
+    qsa("quick-panel[setting]").forEach(panel => {
+      const group = panel.getAttribute("setting");
+      const groupSettings = settings[group];
+      if (!groupSettings) return;
+      panel.querySelectorAll("[setting]").forEach(el => {
+        const key = el.getAttribute("setting");
+        if (groupSettings[key] === undefined) return;
+        if (el.type === "checkbox") el.checked = groupSettings[key];
+        else el.value = groupSettings[key];
+      });
+    });
 
-        if (saveBtn) {
-            saveBtn.addEventListener("click", async () => {
-                await saveAllSettings();
-                location.reload();
-            });
-        }
+    handlePreviewUpdate();
+  }
 
-        function setupDynamicListeners() {
-            document.querySelectorAll("input, select, textarea").forEach(el => {
-                el.addEventListener("input", handlePreviewUpdate);
-                if (el.type === "checkbox") el.addEventListener("change", handlePreviewUpdate);
-            });
+  function setupDynamicListeners() {
+    qsa("input, select, textarea").forEach(el => {
+      el.addEventListener("input", handlePreviewUpdate);
+      if (el.type === "checkbox") el.addEventListener("change", handlePreviewUpdate);
+    });
 
-            const addColorBtn = document.getElementById("addColor");
-            if (addColorBtn) {
-                addColorBtn.addEventListener("click", () => {
-                    const newInput = document.createElement("input");
-                    newInput.type = "color";
-                    newInput.value = "#ffffff";
-                    document.getElementById("colorList").appendChild(newInput);
-                    newInput.addEventListener("input", handlePreviewUpdate);
-                    handlePreviewUpdate();
-                });
-            }
+    const addColorBtn = qs("#addColor");
+    if (addColorBtn) {
+      addColorBtn.addEventListener("click", () => {
+        const newInput = document.createElement("input");
+        newInput.type = "color";
+        newInput.value = "#ffffff";
+        qs("#colorList").appendChild(newInput);
+        newInput.addEventListener("input", handlePreviewUpdate);
+        handlePreviewUpdate();
+      });
+    }
 
-            handlePreviewUpdate();
-        }
+    const saveBtn = qs("#saveBtn");
+    if (saveBtn) saveBtn.addEventListener("click", saveAllSettings);
+    handlePreviewUpdate();
+  }
 
-        function handlePreviewUpdate() {
-            const directionEl = document.getElementById("direction");
-            const preview = document.getElementById("preview");
-
-            if (!preview || !directionEl) return;
-
-            const direction = directionEl.value;
-            const colors = Array.from(document.querySelectorAll("#colorList input[type='color']"))
-                .map(i => i.value);
-
-            preview.style.background = `linear-gradient(${direction}, ${colors.join(", ")})`;
-        }
-
-        async function saveAllSettings() {
-            if (typeof smartschoolSettings === "undefined" || !smartschoolSettings.set) {
-                alert("⚠️ smartschoolSettings API niet gevonden!");
-                return;
-            }
-
-            const allSettings = {};
-
-            document.querySelectorAll("quick-panel[setting]").forEach(panel => {
-                const group = panel.getAttribute("setting");
-                const groupSettings = {};
-
-                panel.querySelectorAll("[setting]").forEach(el => {
-                    const key = el.getAttribute("setting");
-                    if (!key) return;
-
-                    switch (el.type) {
-                        case "checkbox":
-                            groupSettings[key] = el.checked;
-                            break;
-                        default:
-                            groupSettings[key] = el.value;
-                    }
-                });
-
-                allSettings[group] = groupSettings;
-            });
-
-            const navigation = {
-                direction: document.getElementById("direction").value,
-                colors: Array.from(document.querySelectorAll("#colorList input[type='color']"))
-                    .map(i => i.value)
-            };
-            allSettings.navigation = navigation;
-
-            await smartschoolSettings.set("settings", allSettings);
-            saveBtn.textContent = "✅ Opgeslagen!";
-            setTimeout(() => (saveBtn.textContent = "Opslaan"), 1500);
-        }
-
-        async function loadAllSettings() {
-            if (typeof smartschoolSettings === "undefined" || !smartschoolSettings.get) {
-                console.warn("⚠️ smartschoolSettings API niet gevonden, laden overgeslagen.");
-                return;
-            }
-
-            const settings = await smartschoolSettings.get("gradient_nav");
-            if (!settings) return;
-
-            if (settings.navigation) {
-                const { direction, colors } = settings.navigation;
-                const dirSelect = document.getElementById("direction");
-                if (dirSelect) dirSelect.value = direction || "to right";
-
-                const colorList = document.getElementById("colorList");
-                if (colorList) {
-                    colorList.innerHTML = "";
-                    (colors || ["#2ca4d4", "#85e4f2", "#53a0ed"]).forEach(c => {
-                        const input = document.createElement("input");
-                        input.type = "color";
-                        input.value = c;
-                        colorList.appendChild(input);
-                    });
-                }
-            }
-
-            document.querySelectorAll("quick-panel[setting]").forEach(panel => {
-                const group = panel.getAttribute("setting");
-                const groupSettings = settings[group];
-                if (!groupSettings) return;
-
-                panel.querySelectorAll("[setting]").forEach(el => {
-                    const key = el.getAttribute("setting");
-                    if (groupSettings[key] === undefined) return;
-
-                    switch (el.type) {
-                        case "checkbox":
-                            el.checked = groupSettings[key];
-                            break;
-                        default:
-                            el.value = groupSettings[key];
-                    }
-                });
-            });
-
-            handlePreviewUpdate();
-        }
-
-    </script>
-</div>
+  await loadAllSettings();
+  setupDynamicListeners();
+})();
+</script>

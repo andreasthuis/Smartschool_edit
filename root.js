@@ -36,6 +36,7 @@ if (typeof smartschoolSettings === "undefined") {
   document.body.appendChild(overlay);
 } else {
   smartschool_loadScript("features/estimation.js");
+  smartschool_loadScript("features/settings.js");
 
   (function () {
     "use strict";
