@@ -1,11 +1,10 @@
 (async () => {
   const $ = window.jQuery;
 
-  const response = await smartschool_webRequest(
+  const html = await smartschool_webRequest(
     "GET",
     "https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/refs/heads/main/html/settingsElement.html"
   );
-  const html = await response.text();
 
   const container = $("<div>", {
     id: "smartschool-settings",
