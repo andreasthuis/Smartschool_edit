@@ -1,15 +1,13 @@
 <div id="smartschool-settings"></div>
 
 <script>
-(async () => {
-  const container = document.getElementById("smartschool-settings");
-  if (!container) return console.error("❌ Container not found");
+  (async () => {
+    const container = document.getElementById("smartschool-settings");
+    if (!container) return console.error("Container not found");
 
-  // --- Create shadow root ---
-  const shadow = container.attachShadow({ mode: "open" });
+    const shadow = container.attachShadow({ mode: "open" });
 
-  // --- Shadow HTML content ---
-  shadow.innerHTML = `
+    shadow.innerHTML = `
     <style>
       :host {
         all: initial;
@@ -23,6 +21,7 @@
         width: 95%;
         max-width: 800px;
         box-sizing: border-box;
+        justify-content: center;
       }
 
       h1 {
@@ -214,110 +213,123 @@
     </div>
   `;
 
-  // --- Scoped JS logic inside shadow root ---
-  const qs = (sel) => shadow.querySelector(sel);
-  const qsa = (sel) => shadow.querySelectorAll(sel);
+    const qs = (sel) => shadow.querySelector(sel);
+    const qsa = (sel) => shadow.querySelectorAll(sel);
 
-  async function handlePreviewUpdate() {
-    const directionEl = qs("#direction");
-    const preview = qs("#preview");
-    if (!preview || !directionEl) return;
+    async function handlePreviewUpdate() {
+      const directionEl = qs("#direction");
+      const preview = qs("#preview");
+      if (!preview || !directionEl) return;
 
-    const direction = directionEl.value;
-    const colors = Array.from(qsa("#colorList input[type='color']")).map(i => i.value);
-    preview.style.background = `linear-gradient(${direction}, ${colors.join(", ")})`;
-  }
-
-  async function saveAllSettings() {
-    if (typeof smartschoolSettings === "undefined" || !smartschoolSettings.set) {
-      alert("⚠️ smartschoolSettings API niet gevonden!");
-      return;
+      const direction = directionEl.value;
+      const colors = Array.from(qsa("#colorList input[type='color']")).map(
+        (i) => i.value
+      );
+      preview.style.background = `linear-gradient(${direction}, ${colors.join(
+        ", "
+      )})`;
     }
 
-    const allSettings = {};
-    qsa("quick-panel[setting]").forEach(panel => {
-      const group = panel.getAttribute("setting");
-      const groupSettings = {};
-      panel.querySelectorAll("[setting]").forEach(el => {
-        const key = el.getAttribute("setting");
-        if (!key) return;
-        groupSettings[key] = el.type === "checkbox" ? el.checked : el.value;
+    async function saveAllSettings() {
+      if (
+        typeof smartschoolSettings === "undefined" ||
+        !smartschoolSettings.set
+      ) {
+        alert("⚠️ smartschoolSettings API niet gevonden!");
+        return;
+      }
+
+      const allSettings = {};
+      qsa("quick-panel[setting]").forEach((panel) => {
+        const group = panel.getAttribute("setting");
+        const groupSettings = {};
+        panel.querySelectorAll("[setting]").forEach((el) => {
+          const key = el.getAttribute("setting");
+          if (!key) return;
+          groupSettings[key] = el.type === "checkbox" ? el.checked : el.value;
+        });
+        allSettings[group] = groupSettings;
       });
-      allSettings[group] = groupSettings;
-    });
 
-    const navigation = {
-      direction: qs("#direction").value,
-      colors: Array.from(qsa("#colorList input[type='color']")).map(i => i.value)
-    };
-    allSettings.navigation = navigation;
+      const navigation = {
+        direction: qs("#direction").value,
+        colors: Array.from(qsa("#colorList input[type='color']")).map(
+          (i) => i.value
+        ),
+      };
+      allSettings.navigation = navigation;
 
-    await smartschoolSettings.set("settings", allSettings);
-    const saveBtn = qs("#saveBtn");
-    saveBtn.textContent = "✅ Opgeslagen!";
-    setTimeout(() => (saveBtn.textContent = "Opslaan"), 1500);
-  }
+      await smartschoolSettings.set("settings", allSettings);
+      const saveBtn = qs("#saveBtn");
+      saveBtn.textContent = "Opgeslagen!";
+      setTimeout(() => (saveBtn.textContent = "Opslaan"), 1500);
+    }
 
-  async function loadAllSettings() {
-    if (typeof smartschoolSettings === "undefined" || !smartschoolSettings.get) return;
-    const settings = await smartschoolSettings.get("gradient_nav");
-    if (!settings) return;
+    async function loadAllSettings() {
+      if (
+        typeof smartschoolSettings === "undefined" ||
+        !smartschoolSettings.get
+      )
+        return;
+      const settings = await smartschoolSettings.get("gradient_nav");
+      if (!settings) return;
 
-    if (settings.navigation) {
-      const { direction, colors } = settings.navigation;
-      const dirSelect = qs("#direction");
-      if (dirSelect) dirSelect.value = direction || "to right";
-      const colorList = qs("#colorList");
-      if (colorList) {
-        colorList.innerHTML = "";
-        (colors || ["#2ca4d4", "#85e4f2", "#53a0ed"]).forEach(c => {
-          const input = document.createElement("input");
-          input.type = "color";
-          input.value = c;
-          colorList.appendChild(input);
+      if (settings.navigation) {
+        const { direction, colors } = settings.navigation;
+        const dirSelect = qs("#direction");
+        if (dirSelect) dirSelect.value = direction || "to right";
+        const colorList = qs("#colorList");
+        if (colorList) {
+          colorList.innerHTML = "";
+          (colors || ["#2ca4d4", "#85e4f2", "#53a0ed"]).forEach((c) => {
+            const input = document.createElement("input");
+            input.type = "color";
+            input.value = c;
+            colorList.appendChild(input);
+          });
+        }
+      }
+
+      qsa("quick-panel[setting]").forEach((panel) => {
+        const group = panel.getAttribute("setting");
+        const groupSettings = settings[group];
+        if (!groupSettings) return;
+        panel.querySelectorAll("[setting]").forEach((el) => {
+          const key = el.getAttribute("setting");
+          if (groupSettings[key] === undefined) return;
+          if (el.type === "checkbox") el.checked = groupSettings[key];
+          else el.value = groupSettings[key];
+        });
+      });
+
+      handlePreviewUpdate();
+    }
+
+    function setupDynamicListeners() {
+      qsa("input, select, textarea").forEach((el) => {
+        el.addEventListener("input", handlePreviewUpdate);
+        if (el.type === "checkbox")
+          el.addEventListener("change", handlePreviewUpdate);
+      });
+
+      const addColorBtn = qs("#addColor");
+      if (addColorBtn) {
+        addColorBtn.addEventListener("click", () => {
+          const newInput = document.createElement("input");
+          newInput.type = "color";
+          newInput.value = "#ffffff";
+          qs("#colorList").appendChild(newInput);
+          newInput.addEventListener("input", handlePreviewUpdate);
+          handlePreviewUpdate();
         });
       }
+
+      const saveBtn = qs("#saveBtn");
+      if (saveBtn) saveBtn.addEventListener("click", saveAllSettings);
+      handlePreviewUpdate();
     }
 
-    qsa("quick-panel[setting]").forEach(panel => {
-      const group = panel.getAttribute("setting");
-      const groupSettings = settings[group];
-      if (!groupSettings) return;
-      panel.querySelectorAll("[setting]").forEach(el => {
-        const key = el.getAttribute("setting");
-        if (groupSettings[key] === undefined) return;
-        if (el.type === "checkbox") el.checked = groupSettings[key];
-        else el.value = groupSettings[key];
-      });
-    });
-
-    handlePreviewUpdate();
-  }
-
-  function setupDynamicListeners() {
-    qsa("input, select, textarea").forEach(el => {
-      el.addEventListener("input", handlePreviewUpdate);
-      if (el.type === "checkbox") el.addEventListener("change", handlePreviewUpdate);
-    });
-
-    const addColorBtn = qs("#addColor");
-    if (addColorBtn) {
-      addColorBtn.addEventListener("click", () => {
-        const newInput = document.createElement("input");
-        newInput.type = "color";
-        newInput.value = "#ffffff";
-        qs("#colorList").appendChild(newInput);
-        newInput.addEventListener("input", handlePreviewUpdate);
-        handlePreviewUpdate();
-      });
-    }
-
-    const saveBtn = qs("#saveBtn");
-    if (saveBtn) saveBtn.addEventListener("click", saveAllSettings);
-    handlePreviewUpdate();
-  }
-
-  await loadAllSettings();
-  setupDynamicListeners();
-})();
+    await loadAllSettings();
+    setupDynamicListeners();
+  })();
 </script>
