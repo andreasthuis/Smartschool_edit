@@ -273,7 +273,7 @@
         !smartschoolSettings.get
       )
         return;
-      const settings = await smartschoolSettings.get("gradient_nav");
+      const settings = await smartschoolSettings.get("settings");
       if (!settings) return;
 
       if (settings.navigation) {
