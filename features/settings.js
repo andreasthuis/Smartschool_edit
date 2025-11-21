@@ -26,7 +26,7 @@
 
   const settings = await smartschoolSettings.get("settings", false);
 
-  if (!settings) {
+  if (!settings || Object.keys(settings).length === 0) {
     const table = {
       "quick-panel": {
         "base-color": "#fefefe",
@@ -37,15 +37,14 @@
       },
       "navigation": {
         "direction": "to right",
-        "colors": [
-          "#ff520e"
-        ]
+        "colors": ["#ff520e"]
       },
       "nav": {
         "text-color": "#ffffff"
       }
-    }
+    };
 
-    smartschoolSettings.set("settings", table)
+    await smartschoolSettings.set("settings", table);
   }
+
 })();
