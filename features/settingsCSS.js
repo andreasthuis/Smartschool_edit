@@ -19,7 +19,7 @@
         const b = parseInt(hex.slice(5, 7), 16);
 
         const filter = `
-            brightness(0)
+            brightness(1)
             saturate(100%)
             sepia(1)
             hue-rotate(0deg)
