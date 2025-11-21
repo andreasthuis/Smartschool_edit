@@ -3,24 +3,39 @@
     const settings = await smartschoolSettings.get("settings", false);
 
     function applyFilter(element, hexColor) {
+        if (!element) {
+            console.warn("applyFilter: element not found");
+            return;
+        }
+        if (!hexColor) {
+            console.warn("applyFilter: no color provided");
+            return;
+        }
+
+        hexColor = String(hexColor).trim();
+        if (!/^#?[0-9a-fA-F]{6}$/.test(hexColor)) {
+            console.warn("applyFilter: invalid hex, falling back to #ffffff:", hexColor);
+            hexColor = "#ffffff";
+        }
+        if (hexColor[0] !== '#') hexColor = '#' + hexColor;
+
         const rgb = hexColor.replace('#', '');
         const r = parseInt(rgb.substring(0, 2), 16);
         const g = parseInt(rgb.substring(2, 4), 16);
         const b = parseInt(rgb.substring(4, 6), 16);
 
         function solve(color) {
-            let result = { loss: Infinity };
             const colorObj = new Color(color[0], color[1], color[2]);
             const solver = new Solver(colorObj);
             const solution = solver.solve();
-            return solution.filter;
+            return (solution && solution.filter) ? solution.filter : 'none';
         }
 
         class Color {
             constructor(r, g, b) {
-                this.r = this.clamp(r);
-                this.g = this.clamp(g);
-                this.b = this.clamp(b);
+                this.r = this.clamp(Number.isFinite(r) ? r : 255);
+                this.g = this.clamp(Number.isFinite(g) ? g : 255);
+                this.b = this.clamp(Number.isFinite(b) ? b : 255);
             }
             clamp(v) {
                 return Math.max(0, Math.min(255, v));
@@ -32,25 +47,27 @@
                 this.target = target;
             }
             solve() {
-                const result = this.solveNarrow(this.solveWide());
-                return result;
+                return this.solveNarrow(this.solveWide());
             }
             solveWide() {
-                return this.solveNarrow({
+                return {
                     values: [60, 100, 120, 18000, 100, 100],
                     loss: Infinity
-                });
+                };
             }
             solveNarrow(start) {
-                let best = start;
-                let bestLoss = best.loss;
+                const fallbackStart = { values: [60, 100, 120, 18000, 100, 100], loss: Infinity };
+                let best = (start && Array.isArray(start.values)) ? start : fallbackStart;
+                let bestLoss = Number.isFinite(best.loss) ? best.loss : Infinity;
 
                 const A = 0.05;
                 const ITER = 30;
 
                 for (let i = 0; i < ITER; i++) {
+                    const baseValues = Array.isArray(best.values) ? best.values : fallbackStart.values;
+                    const candidateValues = baseValues.map(v => v + (Math.random() - 0.5) * A * v);
                     const candidate = {
-                        values: best.values.map(v => v + (Math.random() - 0.5) * A * v),
+                        values: candidateValues,
                         loss: Infinity
                     };
                     candidate.loss = this.loss(candidate.values);
@@ -59,6 +76,7 @@
                         bestLoss = candidate.loss;
                     }
                 }
+
                 return { filter: this.formatFilter(best.values) };
             }
             loss(values) {
@@ -68,24 +86,26 @@
                     Math.abs(color.b - this.target.b);
             }
             apply(values) {
+                const v = Array.isArray(values) ? values.slice(0, 6).map(n => Number.isFinite(n) ? n : 0) : [60, 100, 120, 0, 100, 100];
+
                 let r = 255, g = 255, b = 255;
 
-                r = (1 - values[0] / 100) * r;
-                g = (1 - values[0] / 100) * g;
-                b = (1 - values[0] / 100) * b;
+                r = (1 - v[0] / 100) * r;
+                g = (1 - v[0] / 100) * g;
+                b = (1 - v[0] / 100) * b;
 
                 const sr = 0.393 * r + 0.769 * g + 0.189 * b;
                 const sg = 0.349 * r + 0.686 * g + 0.168 * b;
                 const sb = 0.272 * r + 0.534 * g + 0.131 * b;
-                r = sr * (values[1] / 100);
-                g = sg * (values[1] / 100);
-                b = sb * (values[1] / 100);
+                r = sr * (v[1] / 100);
+                g = sg * (v[1] / 100);
+                b = sb * (v[1] / 100);
 
-                r *= values[2] / 100;
-                g *= values[2] / 100;
-                b *= values[2] / 100;
+                r *= v[2] / 100;
+                g *= v[2] / 100;
+                b *= v[2] / 100;
 
-                const angle = values[3] * Math.PI / 180;
+                const angle = v[3] * Math.PI / 180;
                 const cos = Math.cos(angle);
                 const sin = Math.sin(angle);
 
@@ -105,31 +125,33 @@
                 g = hg;
                 b = hb;
 
-                r *= values[4] / 100;
-                g *= values[4] / 100;
-                b *= values[4] / 100;
+                r *= v[4] / 100;
+                g *= v[4] / 100;
+                b *= v[4] / 100;
 
-                r = ((r - 128) * values[5] / 100) + 128;
-                g = ((g - 128) * values[5] / 100) + 128;
-                b = ((b - 128) * values[5] / 100) + 128;
+                r = ((r - 128) * v[5] / 100) + 128;
+                g = ((g - 128) * v[5] / 100) + 128;
+                b = ((b - 128) * v[5] / 100) + 128;
 
                 return new Color(r, g, b);
             }
             formatFilter(values) {
+                const v = Array.isArray(values) ? values : [0, 0, 100, 0, 100, 100];
                 return `
-        invert(${values[0]}%)
-        sepia(${values[1]}%)
-        saturate(${values[2]}%)
-        hue-rotate(${values[3]}deg)
-        brightness(${values[4]}%)
-        contrast(${values[5]}%)
-      `.replace(/\s+/g, ' ');
+                invert(${v[0]}%)
+                sepia(${v[1]}%)
+                saturate(${v[2]}%)
+                hue-rotate(${v[3]}deg)
+                brightness(${v[4]}%)
+                contrast(${v[5]}%)
+            `.replace(/\s+/g, ' ').trim();
             }
         }
 
         const filterString = solve([r, g, b]);
         element.style.filter = filterString;
     }
+
 
 
     if (settings) {
