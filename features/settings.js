@@ -45,5 +45,7 @@
         "text-color": "#ffffffff"
       }
     }
+
+    smartschoolSettings.set("settings", table)
   }
 })();
