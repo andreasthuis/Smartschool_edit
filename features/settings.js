@@ -42,7 +42,7 @@
         ]
       },
       "nav": {
-        "text-color": "#ffffffff"
+        "text-color": "#ffffff"
       }
     }
 
