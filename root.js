@@ -1,7 +1,7 @@
 (async () => {
   //loading features:
   smartschool_loadScript("features/settings.js");
-  smartschool_loadScript("features/settings.js")
+  smartschool_loadScript("features/settingsCSS.js")
 
   const settings = await smartschoolSettings.get("settings", false);
 
