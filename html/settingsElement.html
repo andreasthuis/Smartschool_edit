@@ -154,6 +154,36 @@
       #saveBtn:hover {
         background: #e0e0e0;
       }
+
+      .color-item {
+  position: relative;
+  display: inline-block;
+}
+
+.color-item input[type="color"] {
+  cursor: grab;
+}
+
+.color-item button.delete {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  background: #ff4b4b;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  line-height: 18px;
+  padding: 0;
+}
+
+.color-item button.delete:hover {
+  background: #d63838;
+}
+
     </style>
 
     <div class="settings-container">
@@ -284,10 +314,22 @@
         if (colorList) {
           colorList.innerHTML = "";
           (colors || ["#2ca4d4", "#85e4f2", "#53a0ed"]).forEach((c) => {
+            const wrapper = document.createElement("div");
+            wrapper.className = "color-item";
+            wrapper.draggable = true;
+
             const input = document.createElement("input");
             input.type = "color";
             input.value = c;
-            colorList.appendChild(input);
+
+            const del = document.createElement("button");
+            del.className = "delete";
+            del.textContent = "✕";
+
+            wrapper.appendChild(input);
+            wrapper.appendChild(del);
+            colorList.appendChild(wrapper);
+
           });
         }
       }
@@ -317,19 +359,79 @@
       const addColorBtn = qs("#addColor");
       if (addColorBtn) {
         addColorBtn.addEventListener("click", () => {
-          const newInput = document.createElement("input");
-          newInput.type = "color";
-          newInput.value = "#ffffff";
-          qs("#colorList").appendChild(newInput);
-          newInput.addEventListener("input", handlePreviewUpdate);
+          const list = qs("#colorList");
+
+          const wrapper = document.createElement("div");
+          wrapper.className = "color-item";
+          wrapper.draggable = true;
+
+          const input = document.createElement("input");
+          input.type = "color";
+          input.value = "#ffffff";
+
+          const del = document.createElement("button");
+          del.className = "delete";
+          del.textContent = "✕";
+
+          wrapper.appendChild(input);
+          wrapper.appendChild(del);
+          list.appendChild(wrapper);
+
+          input.addEventListener("input", handlePreviewUpdate);
+          setupColorItem(wrapper);
+
           handlePreviewUpdate();
+
         });
+
+        qsa(".color-item").forEach(setupColorItem);
+
+        enableDragAndDrop();
+
       }
 
       const saveBtn = qs("#saveBtn");
       if (saveBtn) saveBtn.addEventListener("click", saveAllSettings);
       handlePreviewUpdate();
     }
+
+    function setupColorItem(wrapper) {
+      const input = wrapper.querySelector("input[type='color']");
+      const del = wrapper.querySelector("button.delete");
+
+      del.addEventListener("click", () => {
+        wrapper.remove();
+        handlePreviewUpdate();
+      });
+
+      wrapper.addEventListener("dragstart", (e) => {
+        wrapper.classList.add("dragging");
+        e.dataTransfer.setData("text/plain", "");
+      });
+
+      wrapper.addEventListener("dragend", () => {
+        wrapper.classList.remove("dragging");
+        handlePreviewUpdate();
+      });
+    }
+
+    function enableDragAndDrop() {
+      const list = qs("#colorList");
+
+      list.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        const dragging = list.querySelector(".dragging");
+        const children = [...list.querySelectorAll(".color-item:not(.dragging)")];
+
+        let next = children.find((child) => {
+          const rect = child.getBoundingClientRect();
+          return e.clientX < rect.left + rect.width / 2;
+        });
+
+        list.insertBefore(dragging, next || null);
+      });
+    }
+
 
     await loadAllSettings();
     setupDynamicListeners();
