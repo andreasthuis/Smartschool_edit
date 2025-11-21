@@ -1,28 +1,13 @@
 (async () => {
   //loading features:
   smartschool_loadScript("features/settings.js");
+  smartschool_loadScript("features/settings.js")
 
   const settings = await smartschoolSettings.get("settings", false);
 
   if (settings) {
     if (settings.estimation.enabled) {
       smartschool_loadScript("features/estimation.js");
-    }
-
-    if (settings.navigation) {
-      const { direction, colors } = settings.navigation;
-
-      const gradient = `linear-gradient(${direction}, ${colors.join(", ")})`;
-
-      const style = document.createElement("style");
-      style.textContent = `
-        .topnav {
-          background: ${gradient} !important;
-        }
-      `;
-      document.head.appendChild(style);
-
-      console.log("Applied gradient:", gradient);
     }
   }
 

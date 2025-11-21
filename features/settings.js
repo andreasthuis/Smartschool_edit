@@ -23,4 +23,27 @@
     content: container.prop("outerHTML"),
     insertType: "append",
   });
+
+  const settings = await smartschoolSettings.get("settings", false);
+
+  if (!settings) {
+    const table = {
+      "quick-panel": {
+        "base-color": "#fefefe",
+        "text-color": "#000000"
+      },
+      "estimation": {
+        "enabled": true
+      },
+      "navigation": {
+        "direction": "to right",
+        "colors": [
+          "#ff520e"
+        ]
+      },
+      "nav": {
+        "text-color": "#ffffffff"
+      }
+    }
+  }
 })();
