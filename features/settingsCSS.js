@@ -150,7 +150,9 @@
         }
 
         if (settings.nav) {
-            applyFilter(document.querySelector('.js-btn-search, .js-btn-manual, .js-btn-logout'), settings.nav["text-color"]);
+            applyFilter(document.querySelector('.js-btn-search'), settings.nav["text-color"]);
+            applyFilter(document.querySelector('.js-btn-manual'), settings.nav["text-color"]);
+            applyFilter(document.querySelector('.js-btn-logout'), settings.nav["text-color"]);
 
             const style = document.createElement("style");
             style.textContent = `
