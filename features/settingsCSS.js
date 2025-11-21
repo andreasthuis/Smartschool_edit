@@ -150,7 +150,7 @@
         }
 
         if (settings.nav) {
-            applyFilter(document.querySelector('.js-btn-search .js-btn-manual .js-btn-logout'), settings.nav["text-color"]);
+            applyFilter(document.querySelector('.js-btn-search, .js-btn-manual, .js-btn-logout'), settings.nav["text-color"]);
 
             const style = document.createElement("style");
             style.textContent = `
@@ -159,15 +159,15 @@
             color: ${settings.nav["text-color"]}
         }
 
-        .smsc-topnav 
+        .smsc-topnav, 
         .topnav__btn:hover {
             color: ${settings.nav["text-color"]}
         }
 
+        .smsc-topnav
+        .topnav__btn:focus,
         .smsc-topnav 
-        .topnav__btn:focus
-        .smsc-topnav 
-        .topnav__btn:hover
+        .topnav__btn:hover,
         .smsc-topnav 
         .topnav__btn[aria-expanded=true] {
             color: ${settings.nav["text-color"]};
