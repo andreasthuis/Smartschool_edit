@@ -14,7 +14,7 @@
   (function () {
     "use strict";
 
-    const API_URL = "https://proud-art-8cdd.andreasdeborger27.workers.dev";
+    const API_URL = "https://sm-edit.andreasdeborger27.workers.dev";
     const INTERVAL_MS = 2000;
 
     function log(msg) {
