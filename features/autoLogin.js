@@ -1,7 +1,7 @@
 (async function () {
     'use strict';
 
-    if (!location.href.includes("login")) return;
+    if (!/\/login$/.test(location.pathname)) return;
 
     const TARGET_HREF = "/login/sso/init/google";
     const TARGET_TEXT = "Google Workspace";
