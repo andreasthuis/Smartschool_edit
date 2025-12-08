@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Smartschool_Edit
 // @namespace    http://tampermonkey.net/
-// @version      0.8.1
+// @version      0.8.1.1
 // @description  Smartschool aanpassen met extra functies: voorspelling van punten, nav kleuren, etc.
 // @license      MIT
 // @author       andreasthuis
@@ -16,7 +16,7 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @connect      raw.githubusercontent.com
-// @connect      proud-art-8cdd.andreasdeborger27.workers.dev
+// @connect      sm-edit.andreasdeborger27.workers.dev
 // @run-at       document-start
 // @updateURL    https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/main/main.user.js
 // @downloadURL  https://raw.githubusercontent.com/andreasthuis/Smartschool_edit/main/main.user.js
