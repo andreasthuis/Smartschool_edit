@@ -8,9 +8,11 @@
   if (settings) {
     if (settings.estimation.enabled) {
       smartschool_loadScript("features/estimation.js");
-    } else if (settings["better-nav"].buttons) {
+    }
+    if (settings["better-nav"].buttons) {
       smartschool_loadScript("features/betterNav.js");
-    } else if (settings.qol["auto-log"]) {
+    }
+    if (settings.qol["auto-log"]) {
       smartschool_loadScript("features/autoLogin.js");
     }
   }
