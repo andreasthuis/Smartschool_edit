@@ -2,8 +2,8 @@
   "use strict";
 
   window.onerror = function (message, source, lineno, colno, error) {
-  const box = document.createElement("pre");
-  box.style.cssText = `
+    const box = document.createElement("pre");
+    box.style.cssText = `
     position: fixed;
     bottom: 0;
     left: 0;
@@ -16,13 +16,13 @@
     font-size: 12px;
     z-index: 999999;
   `;
-  box.textContent =
-    "JS ERROR:\n" +
-    message +
-    "\n\n" +
-    (error && error.stack ? error.stack : "No stack");
-  document.body.appendChild(box);
-};
+    box.textContent =
+      "JS ERROR:\n" +
+      message +
+      "\n\n" +
+      (error && error.stack ? error.stack : "No stack");
+    document.body.appendChild(box);
+  };
 
 
   const $ = window.jQuery;
@@ -78,7 +78,17 @@
           .addClass("icon-dus_u graphic-g55I1 small-Du6aA")
           .css("--size", "24px")
           .html(ICON_SVG)
+      )
+      .append(
+        $("<div/>")
+          .attr({
+            "aria-hidden": "true",
+            label: "Feedback",
+          })
+          .addClass("label-dOebJ")
+          .text("Feedback")
       );
+
 
     const optionWrapper = $("<div/>")
       .addClass("optionWrapper-IEDUX")
@@ -276,15 +286,15 @@
         loading.replaceWith(modal);
       })
       .catch((err) => {
-  loading.text("Failed loading results");
-  loading.append(
-    $("<pre/>").css({
-      color: "red",
-      whiteSpace: "pre-wrap",
-      fontSize: "12px",
-    }).text(err.stack || err.message || err)
-  );
-});
+        loading.text("Failed loading results");
+        loading.append(
+          $("<pre/>").css({
+            color: "red",
+            whiteSpace: "pre-wrap",
+            fontSize: "12px",
+          }).text(err.stack || err.message || err)
+        );
+      });
 
     return loading;
   }
