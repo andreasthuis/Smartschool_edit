@@ -33,19 +33,40 @@
   function addButton() {
     if ($("#show-grid").length) return;
 
-    $(".wide-toolbar").append(
-      $("<button/>")
-        .attr("id", "show-grid")
-        .addClass("wide-toolbar__item")
-        .append(
-          $("<img/>").addClass("wide-toolbar__item__icon").attr("src", ICON_URL)
-        )
-        .append(
-          $("<span/>").addClass("wide-toolbar__item__name").text("Overzicht")
-        )
-        .click(openGrid)
-    );
+    const wrapper = $(".itemsWrapper-TTIS7");
+    if (!wrapper.length) return;
+
+    const button = $("<button/>")
+      .attr({
+        id: "show-grid",
+        "aria-label": "Overzicht",
+        tabindex: "-1",
+      })
+      .addClass("button-mJfIq")
+      .on("click", openGrid)
+      .append(
+        $("<div/>")
+          .attr({
+            "data-type": "icon",
+            "data-shape": "square",
+            "aria-hidden": "true",
+          })
+          .addClass("icon-dus_u graphic-g55I1 small-Du6aA")
+          .css("--size", "24px")
+          .html(ICON_SVG)
+      );
+
+    const optionWrapper = $("<div/>")
+      .addClass("optionWrapper-IEDUX")
+      .attr({
+        "data-selected": "false",
+        "data-collapsed": "true",
+      })
+      .append(button);
+
+    wrapper.append(optionWrapper);
   }
+
 
   function totalToStr(total_numerator, total_denominator) {
     return (
@@ -128,8 +149,8 @@
                   $("<span/>")
                     .addClass(
                       "icon-label icon-label--24 smsc-svg--" +
-                        course_to_graphic[course_name]["value"] +
-                        "--24"
+                      course_to_graphic[course_name]["value"] +
+                      "--24"
                     )
                     .text(course_name)
                 )
@@ -260,64 +281,23 @@
     $("#modal-content, #modal-background").toggleClass("active");
   }
 
-  let wideToolbarCallback = function (mutationsList) {
-    for (let mutation of mutationsList) {
-      if (mutation.type === "childList" && mutation.removedNodes.length !== 0) {
-        for (const node of mutation.removedNodes) {
-          if (node.id === "show-grid") {
-            $(".wide-toolbar").append(node);
-          }
-        }
-      }
-    }
-  };
-  let wideToolbarObserver = new MutationObserver(wideToolbarCallback);
-
-  let smscMainCallback = function (mutationsList, observer) {
-    for (let mutation of mutationsList) {
-      if (
-        mutation.type === "childList" &&
-        mutation.addedNodes.length === 1 &&
-        mutation.addedNodes[0].classList &&
-        mutation.addedNodes[0].classList.contains("wide-toolbar")
-      ) {
-        observer.disconnect();
-        const wt = $(".wide-toolbar")[0];
-        if (wt) {
-          wideToolbarObserver.observe(wt, {
-            attributes: false,
-            childList: true,
-            subtree: false,
-          });
-        }
-        onLoad();
-        addButton();
-      }
-    }
-  };
+  let itemsWrapperObserver = new MutationObserver(() => {
+    addButton();
+  });
 
   (async function init() {
     try {
-      const $smsc = await waitForSelector("#smscMain", 15000);
-      if ($(".wide-toolbar").length) {
-        const wt = $(".wide-toolbar")[0];
-        wideToolbarObserver.observe(wt, {
-          attributes: false,
-          childList: true,
-          subtree: false,
-        });
-        onLoad();
-        addButton();
-      } else {
-        const smscMainObserver = new MutationObserver(smscMainCallback);
-        smscMainObserver.observe($smsc[0], {
-          attributes: false,
-          childList: true,
-          subtree: false,
-        });
-      }
+      const wrapper = await waitForSelector(".itemsWrapper-TTIS7", 15000);
+      itemsWrapperObserver.observe(wrapper[0], {
+        childList: true,
+        subtree: false,
+      });
+
+      onLoad();
+      addButton();
     } catch (err) {
       console.error("Smartschool Grid: failed to initialize:", err);
     }
   })();
+
 })();
