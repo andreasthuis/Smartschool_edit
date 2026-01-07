@@ -83,10 +83,10 @@
         $("<div/>")
           .attr({
             "aria-hidden": "true",
-            label: "Feedback",
+            label: " Overzicht",
           })
           .addClass("label-dOebJ")
-          .text("Feedback")
+          .text(" Overzicht")
       );
 
 
