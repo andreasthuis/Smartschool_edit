@@ -83,7 +83,7 @@
             }
 
             .topnav__menuitem {
-                color: ${text};
+                color: ${text} !important;
             }
 
             .smscButton:hover,
@@ -95,3 +95,4 @@
     }
 
 })();
+
