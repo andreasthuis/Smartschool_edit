@@ -275,7 +275,7 @@
           );
         }
         if (period_buttons.children().length > 1) {
-          period_buttons.prepend($("<span/>").text("Select period: "));
+          period_buttons.prepend($("<span/>").text("Selecteer periode: "));
           modal.append(period_buttons);
         }
 
@@ -308,7 +308,7 @@
         .append(
           $("<div/>")
             .attr("id", "modal-content")
-            .append($("<button/>").attr("id", "modal-close").text("Close"))
+            .append($("<button/>").attr("id", "modal-close").text("X"))
             .append(makeGrid())
         );
 
