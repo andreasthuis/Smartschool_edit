@@ -236,7 +236,7 @@
           }
 
           let overallTotalRow = $("<tr/>");
-          overallTotalRow.append($("<th/>").text("Total"));
+          overallTotalRow.append($("<th/>").text("Totaal"));
           for (let i = 0; i < longest; i++) {
             overallTotalRow.append($("<td/>"));
           }
