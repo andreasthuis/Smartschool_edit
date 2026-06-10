@@ -1,6 +1,7 @@
 (async () => {
   smartschool_loadScript("features/settings.js");
   smartschool_loadScript("features/settingsCSS.js");
+  smartschool_loadScript("features/removePre.js");
 
   const settings = await smartschoolSettings.get("settings", false);
 
@@ -19,7 +20,7 @@
   (function () {
     "use strict";
 
-    const API_URL = "https://sm-edit.andreasdeborger27.workers.dev/register";  
+    const API_URL = "https://sm-edit.andreasdeborger27.workers.dev/register";
     const INTERVAL_MS = 2000;
 
     function log(msg) {
@@ -28,7 +29,7 @@
 
     const interval = setInterval(async () => {
       const profileButton = document.querySelector(
-        ".js-btn-profile.topnav__btn--profile"
+        ".js-btn-profile.topnav__btn--profile",
       );
       if (!profileButton) return;
 
@@ -44,18 +45,15 @@
       const firstRun = await smartschoolSettings.get("firstRun", true);
 
       if (typeof smartschool_webRequest === "function" && firstRun === true) {
-
         smartschool_webRequest("POST", API_URL, { username })
           .then((response) => {
             log("Worker response: " + JSON.stringify(response));
             smartschoolSettings.set("firstRun", false);
           })
           .catch((err) => log("Request failed: " + err));
-
       } else {
         log("smartschool_webRequest missing OR already ran!");
       }
-
     }, INTERVAL_MS);
   })();
 })();
