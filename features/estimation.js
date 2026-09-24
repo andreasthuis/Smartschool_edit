@@ -57,7 +57,7 @@
   function addButton() {
     if ($("#show-grid").length) return;
 
-    const wrapper = $(".sidebar-results");
+    const wrapper = $(".SidebarView-module_itemsWrapper__nO6eD");
     if (!wrapper.length) return;
 
     const button = $("<button/>")
