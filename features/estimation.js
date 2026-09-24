@@ -66,7 +66,7 @@
         "aria-label": "Overzicht",
         tabindex: "-1",
       })
-      .addClass("button-mJfIq")
+      .addClass("OptionView-module_button__PxKGi")
       .on("click", openGrid)
       .append(
         $("<div/>")
@@ -75,7 +75,7 @@
             "data-shape": "square",
             "aria-hidden": "true",
           })
-          .addClass("icon-dus_u graphic-g55I1 small-Du6aA")
+          .addClass("icon-dus_u graphic-g55I1 small-Du6aA graphic-module_graphic__atMsS")
           .css("--size", "24px")
           .html(ICON_SVG)
       )
@@ -85,13 +85,13 @@
             "aria-hidden": "true",
             label: " Overzicht",
           })
-          .addClass("label-dOebJ")
+          .addClass("OptionView-module_label__3mOnu")
           .text(" Overzicht")
       );
 
 
     const optionWrapper = $("<div/>")
-      .addClass("optionWrapper-IEDUX")
+      .addClass("OptionView-module_optionWrapper__sUAD3")
       .attr({
         "data-selected": "false",
         "data-collapsed": "true",
