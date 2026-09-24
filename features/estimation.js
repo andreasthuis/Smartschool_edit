@@ -57,7 +57,7 @@
   function addButton() {
     if ($("#show-grid").length) return;
 
-    const wrapper = $(".itemsWrapper-TTIS7");
+    const wrapper = $(".sidebar-results");
     if (!wrapper.length) return;
 
     const button = $("<button/>")
