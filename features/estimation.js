@@ -328,7 +328,7 @@
 
   (async function init() {
     try {
-      const wrapper = await waitForSelector(".SidebarView-module_itemsWrapper__nO6eD", 15000);
+      const wrapper = await waitForSelector(".itemsWrapper-TTIS7", 15000);
       itemsWrapperObserver.observe(wrapper[0], {
         childList: true,
         subtree: false,
