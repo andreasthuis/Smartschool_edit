@@ -328,7 +328,7 @@
 
   (async function init() {
     try {
-      const wrapper = await waitForSelector("sidebar-results", 15000);
+      const wrapper = await waitForSelector(".sidebar-results", 15000);
       itemsWrapperObserver.observe(wrapper[0], {
         childList: true,
         subtree: false,
