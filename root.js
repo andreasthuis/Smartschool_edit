@@ -1,7 +1,6 @@
 (async () => {
   smartschool_loadScript("features/settings.js");
   smartschool_loadScript("features/settingsCSS.js");
-  smartschool_loadScript("features/removePre.js");
 
   const settings = await smartschoolSettings.get("settings", false);
 
