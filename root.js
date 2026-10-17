@@ -6,7 +6,9 @@
 
   if (settings) {
     if (settings.estimation?.enabled) {
-      smartschool_loadScript("features/estimation.js");
+      document.addEventListener("DOMContentLoaded", function(event){
+        smartschool_loadScript("features/estimation.js");
+      });
     }
     if (settings["better-nav"]?.buttons) {
       smartschool_loadScript("features/betterNav.js");
