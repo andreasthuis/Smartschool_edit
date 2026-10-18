@@ -87,7 +87,8 @@
   }
 
   function makeGrid() {
-    let loading = $("<h3>Loading!</h3>");
+    const LOADING_ID = "smartschool-estimation-loading";
+    let loading = $(`<h3 id="${LOADING_ID}">Loading!</h3>`);
 
     // Build an absolute URL from the page origin to avoid potential relative-path issues
     const url = window.location.origin + "/results/api/v1/evaluations?itemsOnPage=500";
@@ -269,19 +270,33 @@
           main_grid.append(data[latest_period]);
         }
         modal.append(main_grid);
-        loading.replaceWith(modal);
+
+        // Replace the inserted loading placeholder in the actual DOM (not the detached jQuery node)
+        const $insertedLoading = $("#" + LOADING_ID);
+        if ($insertedLoading.length) {
+          $insertedLoading.replaceWith(modal);
+        } else {
+          // Fallback: try to replace the original loading node if it's still in place
+          loading.replaceWith(modal);
+        }
       })
       .catch((err) => {
-        loading.text("Failed loading results");
-        loading.append(
-          $("<pre/>")
-            .css({
-              color: "red",
-              whiteSpace: "pre-wrap",
-              fontSize: "12px",
-            })
-            .text(err.stack || err.message || err)
-        );
+        const $el = $("#" + LOADING_ID);
+        if ($el.length) {
+          $el.text("Failed loading results");
+          $el.append(
+            $("<pre/>")
+              .css({ color: "red", whiteSpace: "pre-wrap", fontSize: "12px" })
+              .text(err.stack || err.message || err)
+          );
+        } else {
+          loading.text("Failed loading results");
+          loading.append(
+            $("<pre/>")
+              .css({ color: "red", whiteSpace: "pre-wrap", fontSize: "12px" })
+              .text(err.stack || err.message || err)
+          );
+        }
         console.error("Smartschool Grid: failed to load evaluations", err);
       });
 
