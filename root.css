@@ -5,7 +5,8 @@
 .profile_header_photo,
 .pupil_nav_photo,
 .smsc-tabslist__item:before,
-.smsc-tabslist__item:after {
+.smsc-tabslist__item:after,
+.headerAvatar-KqtRc {
     display: none !important;
 }
 
