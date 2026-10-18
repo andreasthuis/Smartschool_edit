@@ -6,7 +6,7 @@
 .pupil_nav_photo,
 .smsc-tabslist__item:before,
 .smsc-tabslist__item:after,
-.headerAvatar-KqtRc {
+.headerAvatar-KqtRc>img {
     display: none !important;
 }
 
