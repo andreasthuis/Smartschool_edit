@@ -3,7 +3,7 @@
 
   const $ = window.jQuery;
 
-  const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve"><g style="strok[...]"></g></svg>`;
+  const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve"><g style="st[...]"></g></svg>`;
   const ICON_URL = "data:image/svg+xml;utf8," + encodeURIComponent(ICON_SVG);
 
   function waitForSelector(selector, timeout = 10000) {
@@ -88,8 +88,18 @@
 
   function makeGrid() {
     let loading = $("<h3>Loading!</h3>");
-    fetch("/results/api/v1/evaluations?itemsOnPage=500")
-      .then((r) => r.json())
+
+    // Build an absolute URL from the page origin to avoid potential relative-path issues
+    const url = window.location.origin + "/results/api/v1/evaluations?itemsOnPage=500";
+
+    fetch(url)
+      .then(async (r) => {
+        if (!r.ok) {
+          const txt = await r.text().catch(() => "<no body>");
+          throw new Error(`Fetch failed ${r.status} ${r.statusText}: ${txt}`);
+        }
+        return r.json();
+      })
       .then((results) => {
         let data = {};
         let course_to_graphic = {};
@@ -159,8 +169,8 @@
                   $("<span/>")
                     .addClass(
                       "icon-label icon-label--24 smsc-svg--" +
-                      course_to_graphic[course_name]["value"] +
-                      "--24"
+                        course_to_graphic[course_name]["value"] +
+                        "--24"
                     )
                     .text(course_name)
                 )
@@ -264,12 +274,15 @@
       .catch((err) => {
         loading.text("Failed loading results");
         loading.append(
-          $("<pre/>").css({
-            color: "red",
-            whiteSpace: "pre-wrap",
-            fontSize: "12px",
-          }).text(err.stack || err.message || err)
+          $("<pre/>")
+            .css({
+              color: "red",
+              whiteSpace: "pre-wrap",
+              fontSize: "12px",
+            })
+            .text(err.stack || err.message || err)
         );
+        console.error("Smartschool Grid: failed to load evaluations", err);
       });
 
     return loading;
