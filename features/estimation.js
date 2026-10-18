@@ -3,7 +3,7 @@
 
   const $ = window.jQuery;
 
-  const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve"><g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)"><path d="M 40.135 90 h -8.782 c -1.519 0 -2.75 -1.231 -2.75 -2.75 V 49.854 c 0 -1.519 1.231 -2.75 2.75 -2.75 h 8.782 c 1.519 0 2.75 1.231 2.75 2.75 V 87.25 C 42.885 88.769 41.654 90 40.135 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,195,110); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"/><path d="M 58.647 90 h -8.782 c -1.519 0 -2.75 -1.231 -2.75 -2.75 V 42.876 c 0 -1.519 1.231 -2.75 2.75 -2.75 h 8.782 c 1.519 0 2.75 1.231 2.75 2.75 V 87.25 C 61.397 88.769 60.165 90 58.647 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(165,215,110); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"/><path d="M 21.624 90 h -8.782 c -1.519 0 -2.75 -1.231 -2.75 -2.75 V 67.813 c 0 -1.519 1.231 -2.75 2.75 -2.75 h 8.782 c 1.519 0 2.75 1.231 2.75 2.75 V 87.25 C 24.374 88.769 23.142 90 21.624 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(210,85,90); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"/><path d="M 77.158 90 h -8.782 c -1.519 0 -2.75 -1.231 -2.75 -2.75 V 30.331 c 0 -1.519 1.231 -2.75 2.75 -2.75 h 8.782 c 1.519 0 2.75 1.231 2.75 2.75 V 87.25 C 79.908 88.769 78.677 90 77.158 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(120,210,190); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"/><polygon points="18.74,49.47 15.72,46.85 34.68,25.05 53.32,21.13 71.44,4.93 74.1,7.91 55.19,24.83 36.81,28.68 " style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(175,185,210); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/><circle cx="17.284" cy="48.373999999999995" r="6.464" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(175,185,210); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/><circle cx="35.744" cy="27.284" r="6.464" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(175,185,210); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/><circle cx="54.254" cy="22.234" r="6.464" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(175,185,210); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/><circle cx="72.764" cy="6.414000000000001" r="6.464" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(175,185,210); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/></g></svg>`;
+  const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve"><g style="strok[...]"></g></svg>`;
   const ICON_URL = "data:image/svg+xml;utf8," + encodeURIComponent(ICON_SVG);
 
   function waitForSelector(selector, timeout = 10000) {
@@ -324,10 +324,21 @@
 
   (async function init() {
     try {
-      const wrapper = await waitForSelector(".sidebar-results", 15000);
-      itemsWrapperObserver.observe(wrapper[0], {
+      // Wait for the specific items wrapper to exist
+      const itemsWrapper = await waitForSelector(
+        ".SidebarView-module_itemsWrapper__nO6eD",
+        15000
+      );
+
+      // Wait until it actually has child content so we don't add the button into an
+      // empty container that the app will later replace
+      await waitForSelector(".SidebarView-module_itemsWrapper__nO6eD > *", 15000);
+
+      // Re-observe the wrapper and watch subtree changes — when the app re-renders children
+      // we call addButton() again to ensure the button is present
+      itemsWrapperObserver.observe(itemsWrapper[0], {
         childList: true,
-        subtree: false,
+        subtree: true, // subtree true so we catch deeper re-renders that remove/replace our node
       });
 
       await onLoad();
